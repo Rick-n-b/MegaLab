@@ -16,11 +16,11 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root dividerPositions="0.3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="800.0" type="SplitPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
+<SplitPane fx:id="turboBox" dividerPositions="0.3" minHeight="540.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.lab02v2.MainController">
   <items>
-    <AnchorPane fx:id="interfacePane" maxHeight="1.7976931348623157E308" maxWidth="180.0" minHeight="400.0" minWidth="180.0" prefHeight="400.0" prefWidth="180.0">
+    <AnchorPane fx:id="interfacePane" maxWidth="-Infinity" minHeight="400.0" minWidth="-Infinity" prefHeight="400.0" prefWidth="180.0">
          <children>
-            <MenuBar fx:id="mainMenu" layoutY="1.0" prefHeight="30.0" prefWidth="180.0">
+            <MenuBar fx:id="mainMenu" prefHeight="30.0" prefWidth="180.0">
               <menus>
                 <Menu mnemonicParsing="false" text="Sim">
                   <items>
@@ -36,10 +36,10 @@
                         </CustomMenuItem>
                         <RadioMenuItem fx:id="showTimerRBMenu" mnemonicParsing="false" text="Show">
                            <toggleGroup>
-                              <ToggleGroup fx:id="timerShow" />
+                              <ToggleGroup fx:id="menuTimerShow" />
                            </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="hideTimerRBMenu" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
+                        <RadioMenuItem fx:id="hideTimerRBMenu" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$menuTimerShow" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exitMenu" mnemonicParsing="false" onMenuValidation="#exit" text="Exit" />
                   </items>
@@ -51,19 +51,24 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <Button fx:id="startButton" layoutX="70.0" layoutY="82.0" mnemonicParsing="false" onAction="#startSim" text="Start" />
-            <Button fx:id="endButton" layoutX="72.0" layoutY="120.0" mnemonicParsing="false" onAction="#endSim" text="End" textAlignment="CENTER" />
-            <TextArea fx:id="motoscfg" layoutX="7.0" layoutY="203.0" prefHeight="17.0" prefWidth="166.0" promptText="50.0" />
-            <Label layoutX="14.0" layoutY="177.0" text="Moto spawn period" />
-            <TextArea fx:id="carscfg" layoutX="8.0" layoutY="326.0" prefHeight="25.0" prefWidth="166.0" promptText="100.0" />
-            <Label layoutX="15.0" layoutY="300.0" text="Car spawn period" />
-            <ComboBox fx:id="motoSpawnChanceComboBox" layoutX="16.0" layoutY="246.0" prefWidth="150.0" promptText="Moto spawn chance" />
-            <ComboBox fx:id="carSpawnChanceComboBox" layoutX="16.0" layoutY="372.0" prefWidth="150.0" promptText="Car spawn chance" />
-            <RadioButton fx:id="showTimerRB" layoutX="27.0" layoutY="433.0" mnemonicParsing="false" text="Show" toggleGroup="$timerShow" />
-            <RadioButton fx:id="hideTimerRB" layoutX="27.0" layoutY="462.0" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
-            <Label fx:id="timerLabel" layoutX="53.0" layoutY="407.0" text="time" visible="false" />
-            <Label layoutX="17.0" layoutY="407.0" text="Timer" />
+            <Button fx:id="startButton" layoutX="70.0" layoutY="56.0" mnemonicParsing="false" onAction="#startSim" text="Start" />
+            <Button fx:id="endButton" layoutX="72.0" layoutY="94.0" mnemonicParsing="false" onAction="#endSim" text="End" textAlignment="CENTER" />
+            <TextArea fx:id="motoscfg" layoutX="8.0" layoutY="177.0" prefHeight="17.0" prefWidth="166.0" promptText="millis: 50" />
+            <Label layoutX="8.0" layoutY="149.0" text="Moto spawn period" />
+            <TextArea fx:id="carscfg" layoutX="8.0" layoutY="299.0" prefHeight="25.0" prefWidth="166.0" promptText="millis: 100" />
+            <Label layoutX="8.0" layoutY="274.0" text="Car spawn period" />
+            <ComboBox fx:id="motoSpawnChanceComboBox" layoutX="110.0" layoutY="229.0" prefHeight="26.0" prefWidth="65.0" visibleRowCount="4" />
+            <ComboBox fx:id="carSpawnChanceComboBox" layoutX="110.0" layoutY="355.0" prefHeight="26.0" prefWidth="65.0" visibleRowCount="4" />
+            <Label layoutX="8.0" layoutY="349.0" prefHeight="38.0" prefWidth="72.0" text="Car spawn chance " textAlignment="CENTER" wrapText="true" />
+            <Label layoutX="8.0" layoutY="223.0" prefHeight="39.0" prefWidth="72.0" text="Moto spawn chance" textAlignment="CENTER" wrapText="true" />
+            <RadioButton fx:id="showTimerRB" layoutX="26.0" layoutY="427.0" mnemonicParsing="false" text="Show">
+               <toggleGroup>
+                  <ToggleGroup fx:id="timerShow" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="hideTimerRB" layoutX="27.0" layoutY="456.0" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
+            <Label fx:id="timerLabel" layoutX="53.0" layoutY="401.0" text="time" visible="false" />
+            <Label layoutX="17.0" layoutY="400.0" text="Timer" />
          </children></AnchorPane>
-    <AnchorPane fx:id="field" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="420.0" prefHeight="600.0" prefWidth="620.0" />
+    <AnchorPane fx:id="field" minHeight="400.0" minWidth="420.0" prefHeight="600.0" prefWidth="620.0" />
   </items>
-</fx:root>
+</SplitPane>
