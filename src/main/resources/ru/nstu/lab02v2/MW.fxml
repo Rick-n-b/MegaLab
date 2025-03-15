@@ -27,7 +27,7 @@
                         <MenuItem fx:id="startMenu" mnemonicParsing="false" onAction="#startSim" text="Start" />
                     <MenuItem fx:id="endMenu" mnemonicParsing="false" onAction="#endSim" text="End" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <CheckMenuItem fx:id="infoMenu" mnemonicParsing="false" onAction="#clickShow" text="Show stats on end" />
+                        <CheckMenuItem fx:id="infoMenu" mnemonicParsing="false" text="Show stats on end" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CustomMenuItem mnemonicParsing="false">
                            <content>

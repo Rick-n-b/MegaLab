@@ -28,40 +28,34 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    @FXML public SplitPane          turboBox;
+    @FXML public SplitPane          turboBox;//общая коробка
     @FXML public ComboBox<Integer>  carSpawnChanceComboBox;
     @FXML public ComboBox<Integer>  motoSpawnChanceComboBox;
-    @FXML public TextArea           carscfg;
+    @FXML public TextArea           carscfg;//период спавна жабамашин
     @FXML public Button             endButton;
-    @FXML public MenuItem           endMenu;
-    @FXML public MenuItem           exitMenu;
-    @FXML public AnchorPane         field;
-    @FXML public MenuItem           helpMenuButton;
-    @FXML public RadioButton        hideTimerRB;
-    @FXML public RadioMenuItem      hideTimerRBMenu;
-    @FXML public CheckMenuItem      infoMenu;
-    @FXML public AnchorPane         interfacePane;
-    @FXML public MenuBar            mainMenu;
-    @FXML public TextArea           motoscfg;
-    @FXML public RadioButton        showTimerRB;
-    @FXML public RadioMenuItem      showTimerRBMenu;
-    @FXML public Button             startButton;
-    @FXML public MenuItem           startMenu;
-    @FXML public Label              timerLabel;
-    @FXML public ToggleGroup        timerShow;
+    @FXML public MenuItem           endMenu;//кнопка конца симуляции (меню)
+    @FXML public MenuItem           exitMenu;//кнопка выхода в меню
+    @FXML public AnchorPane         field;//поле спавна жаб
+    @FXML public MenuItem           helpMenuButton;//
+    @FXML public RadioButton        hideTimerRB;//скрыть таймер
+    @FXML public RadioButton        showTimerRB;//показать таймер
+    @FXML public RadioMenuItem      showTimerRBMenu;//показать таймер (меню)
+    @FXML public RadioMenuItem      hideTimerRBMenu;//скрыть таймер (меню)
+    @FXML public CheckMenuItem      infoMenu;//показать сводку
+    @FXML public AnchorPane         interfacePane;//коробка меню
+    @FXML public MenuBar            mainMenu;//меню
+    @FXML public TextArea           motoscfg;//период спавна жабамотоциклов
+    @FXML public Button             startButton;//кнопка начала симуляции
+    @FXML public MenuItem           startMenu;//кнопка начала симуляции (меню)
+    @FXML public Label              timerLabel;//текстовое поле для времени
+    @FXML public ToggleGroup        timerShow;//группа радио-кнопок
 
     ToadSpawner toadSpawner = new ToadSpawner(field);
 
-    Boolean show = false;
-    @FXML
-    void clickShow(ActionEvent event) {//показывать/не показывать статистику в конце симуляции
-        show = infoMenu.isSelected();
-    }
-    @FXML
-    void endSim(ActionEvent event) throws IOException, InterruptedException {//конец симуляции
-        if(show){
+    @FXML void endSim(ActionEvent event) throws IOException {//конец симуляции
+        if(infoMenu.isSelected()){
             toadSpawner.pause();
-            Module module = new Module();
+            Module module = new Module();//вызов модульного меню
             module.setToadSpawner(toadSpawner);
             module.setMainController(this);
             module.start((Stage) timerLabel.getScene().getWindow());
@@ -70,24 +64,15 @@ public class MainController implements Initializable {
             toadSpawner.end();
         }
     }
-    @FXML
-    void exit(ActionEvent event) {//выход из приложения через меню
+    @FXML void exit(ActionEvent event) {//выход из приложения через меню
         Platform.exit();
     }
-    @FXML
-    void startSim(ActionEvent event) {//старт симуляции
+    @FXML void startSim(ActionEvent event) {//старт симуляции
         endEnable();
-        Platform.runLater(runLater);
+        toadSpawner.start();
     }
 
-    Runnable runLater = new Runnable() {
-        @Override
-        public void run() {
-            toadSpawner.start();
-        }
-    };
-
-    public void startEnable(){//включет кнопку старт
+    public void startEnable(){//включает кнопку старт
         startButton.setDisable(false);
         startMenu.setDisable(false);
         endButton.setDisable(true);
@@ -104,27 +89,27 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        timerLabel.setText("time");
-        toadSpawner.setPane(field);
+        toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
+        //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
-        for(int i = 0; i <= 100; i+=10){
+
+        for(int i = 0; i <= 100; i+=10){//задаём значения комбо-боксам
             carSpawnChanceComboBox.getItems().add(i);
             motoSpawnChanceComboBox.getItems().add(i);
         }
+        //начальный выбор комбо-боксов
         carSpawnChanceComboBox.getSelectionModel().select(1);
         motoSpawnChanceComboBox.getSelectionModel().select(2);
-
+        //кнопки конца симуляции сначала недоступны
         endButton.setDisable(true);
         endMenu.setDisable(true);
-
+        //бинд кнопок начала и конца симуляции (кнопка старт вкл -> кнопка end выкл)
         endButton.disableProperty().bindBidirectional(endMenu.disableProperty());
         startButton.disableProperty().bindBidirectional(startMenu.disableProperty());
-        //
-
+        //бинды радио-кнопок
         hideTimerRB.selectedProperty().bindBidirectional(hideTimerRBMenu.selectedProperty());
         showTimerRB.selectedProperty().bindBidirectional(showTimerRBMenu.selectedProperty());
-
+        //зависимость видимости текста от выбора радио-кнопки
         timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
-
     }
 }

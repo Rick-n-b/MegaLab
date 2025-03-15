@@ -43,10 +43,8 @@ public class ModuleController implements Initializable {
     private String info = "";
 
     public void setInfo(String info){
-        Platform.runLater(() -> {
-            this.info = info;
-            infoField.setText(info);
-        });
+        this.info = info;
+        infoField.setText(info);
     }
 
     @Override
