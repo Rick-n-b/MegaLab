@@ -49,10 +49,10 @@ public class MotoJaba extends Entity implements SimpleAI {
     }
 
 
-    void spawn(Pane pane){
+    public void spawn(Pane pane){
             pane.getChildren().add(view);
     }
-    void die(Pane pane){
+    public void die(Pane pane){
         pane.getChildren().remove(view);
     }
 

@@ -60,12 +60,11 @@ public class MainController implements Initializable {
     @FXML
     void endSim(ActionEvent event) throws IOException, InterruptedException {//конец симуляции
         if(show){
-            //toadSpawner.pause();
+            toadSpawner.pause();
             Module module = new Module();
             module.setToadSpawner(toadSpawner);
             module.setMainController(this);
             module.start((Stage) timerLabel.getScene().getWindow());
-
         }else{
             startEnable();
             toadSpawner.end();

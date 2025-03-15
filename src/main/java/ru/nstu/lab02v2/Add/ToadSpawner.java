@@ -15,22 +15,61 @@ public class ToadSpawner {
     private Pane pane;
     public SimpleStringProperty millisProperty = new SimpleStringProperty("0");
     private long millis = 0;
-    private int motoSpawnPeriod = 200, carSpawnperiod = 100;
-    private int motoSpawnChance = 30, carSpawnChance = 20;
+    private int motoSpawnPeriod = 5000, carSpawnperiod = 100;
+    private int motoSpawnChance = 100, carSpawnChance = 20;
     private final static Random rand = new Random();
+
+    private Boolean paused = false;
+    private Boolean started = false;
 
     public ToadSpawner(Pane pane){
         motos = new ArrayList<>();
         this.pane = pane;
     }
 
-    Timer timer = new Timer();
+    Timer timer = new Timer("AllTheTimer");
 
     TimerTask spawnMoto;
-
     TimerTask countMillis;
+    //millis saved, moto millis saved, cars millis saved
+    long saveTime[] = new long[2];
 
     public void start(){
+        started = true;
+        paused = false;
+        clear();
+        millis = 0;
+        setTasks();
+        timer.scheduleAtFixedRate(countMillis, 0, 1);
+        timer.scheduleAtFixedRate(spawnMoto, 0, motoSpawnPeriod);
+    }
+    public void end(){
+        started = false;
+        paused = false;
+        countMillis.cancel();
+        spawnMoto.cancel();
+        timer.purge();
+    }
+    public synchronized void pause() {
+        if(!paused) {
+            saveTime[0] = (System.currentTimeMillis() - spawnMoto.scheduledExecutionTime());
+            System.out.println(saveTime[0]);
+            spawnMoto.cancel();
+            countMillis.cancel();
+            timer.purge();
+        }
+        paused = true;
+    }
+    public synchronized void unpause(){
+        if(started && paused){
+            setTasks();
+            timer.scheduleAtFixedRate(countMillis, 1, 1);
+            timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
+        }
+      paused = false;
+    }
+
+    private void setTasks(){
         countMillis =  new TimerTask() {
             @Override
             public void run() {
@@ -52,19 +91,6 @@ public class ToadSpawner {
                 });
             }
         };
-        timer.scheduleAtFixedRate(countMillis, 0, 1);
-        timer.scheduleAtFixedRate(spawnMoto, 0, motoSpawnPeriod);
-    }
-    public void end(){
-        countMillis.cancel();
-        spawnMoto.cancel();
-        timer.purge();
-    }
-    public void pause() throws InterruptedException {
-        wait();
-    }
-    public void unpause(){
-       notifyAll();
     }
 
     public ArrayList<MotoJaba> getMotos() {
@@ -80,11 +106,23 @@ public class ToadSpawner {
         return motoTypeCount;
     }
 
+    public Boolean isPaused(){
+        return paused;
+    }
+
+    public void clear(){
+        for(MotoJaba moto : motos){
+            moto.die(pane);
+        }
+        motos.clear();
+    }
 
     public void setPane(Pane pane) {
         this.pane = pane;
     }
-
+    public void setPaused(Boolean state){
+        this.paused = state;
+    }
 
 
 }
