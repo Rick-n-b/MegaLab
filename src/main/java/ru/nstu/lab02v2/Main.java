@@ -15,15 +15,15 @@ public class Main extends Application {
     ToadSpawner toadSpawner;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MW.fxml"));
-        Parent root = fxmlLoader.load();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MW.fxml"));
+        Parent loader = fxmlLoader.load();
+        fxmlLoader.setRoot(new SplitPane());
         MainController mainController = fxmlLoader.getController();
-
-        Scene scene = new Scene(root);
-        stage.setTitle("Swamp sim");
+        Scene scene = new Scene(loader);
         stage.setScene(scene);
-        stage.setMinWidth(root.minWidth(-1));
-        stage.setMinHeight(root.minHeight(-1));
+        stage.setTitle("Swamp sim");
+        stage.setMinWidth(loader.minWidth(-1));
+        stage.setMinHeight(loader.minHeight(-1));
         stage.show();
     }
 

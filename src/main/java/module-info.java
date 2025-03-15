@@ -1,6 +1,7 @@
 module ru.nstu.lab02v2 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     opens ru.nstu.lab02v2 to javafx.fxml;

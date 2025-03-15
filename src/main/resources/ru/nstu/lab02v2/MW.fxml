@@ -24,10 +24,10 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Sim">
                   <items>
-                        <MenuItem fx:id="startMenu" mnemonicParsing="false" onMenuValidation="#startSim" text="Start" />
-                    <MenuItem fx:id="endMenu" mnemonicParsing="false" onMenuValidation="#endSim" text="End" />
+                        <MenuItem fx:id="startMenu" mnemonicParsing="false" onAction="#startSim" text="Start" />
+                    <MenuItem fx:id="endMenu" mnemonicParsing="false" onAction="#endSim" text="End" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <CheckMenuItem fx:id="infoMenu" mnemonicParsing="false" onMenuValidation="#clickShow" text="Show stats on end" />
+                        <CheckMenuItem fx:id="infoMenu" mnemonicParsing="false" onAction="#clickShow" text="Show stats on end" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CustomMenuItem mnemonicParsing="false">
                            <content>
@@ -41,7 +41,7 @@
                         </RadioMenuItem>
                         <RadioMenuItem fx:id="hideTimerRBMenu" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$menuTimerShow" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="exitMenu" mnemonicParsing="false" onMenuValidation="#exit" text="Exit" />
+                        <MenuItem fx:id="exitMenu" mnemonicParsing="false" onAction="#exit" text="Exit" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

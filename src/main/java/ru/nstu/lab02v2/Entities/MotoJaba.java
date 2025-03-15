@@ -12,8 +12,12 @@ import java.util.TimerTask;
 
 public class MotoJaba extends Entity implements SimpleAI {
 
+    public static Image[] motoImages = {
+            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad1.png")), 150, 150, true, true),
+            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad2.png")), 150, 150, true, true)
+    };
     public final int type = random.nextInt(motoImages.length);
-    ImageView view = new ImageView(motoImages[type]);
+    private ImageView view = new ImageView(motoImages[type]);
 
     public MotoJaba(){
         view.resize(this.getSizeX(), this.getSizeY());
@@ -52,23 +56,26 @@ public class MotoJaba extends Entity implements SimpleAI {
         pane.getChildren().remove(view);
     }
 
-
     public void setLocation(double x, double y){
         this.x = x;
         this.y = y;
-        view.setX(x);
-        view.setY(y);
+        view.setX(this.x);
+        view.setY(this.y);
     }
     public void setRandomLocation(){
         this.x = random.nextDouble(600);
         this.y = random.nextDouble(500);
-        view.setX(x);
-        view.setY(y);
+        view.setX(this.x);
+        view.setY(this.y);
     }
     public void setRandomLocationWithBounds(double maxX, double maxY){
         this.x = random.nextDouble(maxX);
         this.y = random.nextDouble(maxY);
-        view.setX(x);
-        view.setY(y);
+        view.setX(this.x);
+        view.setY(this.y);
+    }
+
+    public static Image[] getMotoImages() {
+        return motoImages;
     }
 }

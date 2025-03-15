@@ -11,14 +11,11 @@ public abstract class Entity {
     protected double sizeX = 150, sizeY = 0;
     protected static final Random random = new Random();
 
-    protected static Image[] motoImages = {
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("MotoToad1.png")), 150, 150, true, true),
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("MotoToad2.png")), 150, 150, true, true)
-    };
-    protected static Image[] carImages = {
+
+    /*protected static Image[] carImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("CarToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("CarToad2.png")), 150, 150, true, true)
-    };
+    };*/
 
     public void setSizeY(double sizeY) {
         this.sizeY = sizeY;
@@ -37,9 +34,6 @@ public abstract class Entity {
         this.sizeY = sizeY;
     }
 
-    public static Image[] getMotoImages() {
-        return motoImages;
-    }
     public double getSizeX() {
         return sizeX;
     }
