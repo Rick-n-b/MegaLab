@@ -3,6 +3,7 @@ package ru.nstu.lab02v2.module;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import ru.nstu.lab02v2.MainController;
@@ -13,6 +14,8 @@ import java.util.ResourceBundle;
 
 public class ModuleController implements Initializable {
 
+    public Button okButton;
+    public Button cancelButton;
     private ToadSpawner toadSpawner;
     private MainController mainController;
     public void setToadSpawner(ToadSpawner toadSpawner) {

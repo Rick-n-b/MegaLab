@@ -47,21 +47,25 @@ public class ToadSpawner {
 
     //запуск симуляции
     public void start(){
-        started = true;
-        paused = false;
-        clear();//очистка поля
-        millis = 0;//обновление таймера
-        tasksSet();//задание всех тасков
-        timer.scheduleAtFixedRate(countMillis, 0, 1);//запуск таймера
-        timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod / 2, motoSpawnPeriod);
-        timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod / 2, carSpawnPeriod);
+        if(!started){
+            started = true;
+            paused = false;
+            clear();//очистка поля
+            millis = 0;//обновление таймера
+            tasksSet();//задание всех тасков
+            timer.scheduleAtFixedRate(countMillis, 0, 1);//запуск таймера
+            timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod, motoSpawnPeriod);
+            timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod, carSpawnPeriod);
+        }
     }
     //конец симуляции
     public void end(){
-        started = false;
-        paused = false;
-        tasksCancel();//убийство тасков
-        timer.purge();//сгорание/очистка таймера
+        if(started){
+            started = false;
+            paused = false;
+            tasksCancel();//убийство тасков
+            timer.purge();//сгорание/очистка таймера
+        }
     }
     //остановка на "паузу"
     public synchronized void pause() {
@@ -106,7 +110,7 @@ public class ToadSpawner {
             @Override
             public void run() {
                 Platform.runLater(()->{
-                    if(rand.nextInt(100) <= motoSpawnChance){
+                    if(rand.nextInt(100) < motoSpawnChance){
                         motos.add(new MotoJaba(pane));
                         motoTypeCount[motos.getLast().type]++;
                     }
@@ -117,7 +121,7 @@ public class ToadSpawner {
             @Override
             public void run() {
                 Platform.runLater(()->{
-                    if(rand.nextInt(100) <= carSpawnChance){
+                    if(rand.nextInt(100) < carSpawnChance){
                         cars.add(new CarJaba(pane));
                         carTypeCount[cars.getLast().type]++;
                     }
@@ -137,6 +141,11 @@ public class ToadSpawner {
             moto.die(pane);
         }
         motos.clear();
+
+        for(CarJaba car : cars){
+            car.die(pane);
+        }
+        cars.clear();
     }
 
     /*функции геттеры и сеттеры*/
@@ -163,6 +172,18 @@ public class ToadSpawner {
     }
     public Boolean isStarted(){
         return started;
+    }
+    public int getCarSpawnChance() {
+        return carSpawnChance;
+    }
+    public int getCarSpawnPeriod() {
+        return carSpawnPeriod;
+    }
+    public int getMotoSpawnChance() {
+        return motoSpawnChance;
+    }
+    public int getMotoSpawnPeriod() {
+        return motoSpawnPeriod;
     }
 
     public void setPane(Pane pane) {

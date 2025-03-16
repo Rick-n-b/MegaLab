@@ -17,6 +17,7 @@ public class Module extends Application {
 
     private ToadSpawner toadSpawner;
     private MainController mainController;
+    ModuleController moduleController;
     public void setToadSpawner(ToadSpawner toadSpawner) {
         this.toadSpawner = toadSpawner;
     }
@@ -41,17 +42,24 @@ public class Module extends Application {
         return inf.toString();
     }
 
+    public void setInfo(String info){
+        moduleController.setInfo(info);
+    }
+    public void cancelButtonDisable(){
+        moduleController.cancelButton.setDisable(true);
+    }
+
     public void start(Stage ownerStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Module.fxml"));
         Parent loader = fxmlLoader.load();
-        ModuleController moduleController = fxmlLoader.getController();
+        moduleController = fxmlLoader.getController();
         moduleController.setInfo(generateInfo());
         moduleController.setToadSpawner(toadSpawner);
         moduleController.setMainController(mainController);
         Scene scene = new Scene(loader);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Info");
+        stage.setTitle("Module");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(ownerStage);
         stage.setResizable(false);
