@@ -30,12 +30,11 @@ public class Module extends Application {
             inf.append("Type").append(i + 1).append(": ").append(toadSpawner.getMotoTypeCount()[i]).append("\n");
         }
 
-        /*inf.append("Cars: " + toadSpawner.getCars().toArray().length + "\n");
-        for(int i = 0; i < toadSpawner.getCarCount().length; i++){
-            inf.append("Type").append(i + 1).append(": ").append(toadSpawner.getCarCount()[i]).append("\n");
-        }*/
+        inf.append("Cars: " + toadSpawner.getCars().toArray().length + "\n");
+        for(int i = 0; i < toadSpawner.getCarTypeCount().length; i++){
+            inf.append("Type").append(i + 1).append(": ").append(toadSpawner.getCarTypeCount()[i]).append("\n");
+        }
 
-        //inf.append("Time: ").append(toadSpawner.getMillis() / 60000).append(":").append(toadSpawner.getMillis() / 1000).append(":").append(toadSpawner.getMillis() % 1000);
         String time = String.format("Time: %02d:%02d:%03d", toadSpawner.getMillis() / 60000, toadSpawner.getMillis() / 1000, toadSpawner.getMillis() % 1000);
 
         inf.append(time);
