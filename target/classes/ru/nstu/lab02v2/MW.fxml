@@ -53,7 +53,7 @@
             </MenuBar>
             <Button fx:id="startButton" layoutX="70.0" layoutY="56.0" mnemonicParsing="false" onAction="#startSim" text="Start" />
             <Button fx:id="endButton" layoutX="72.0" layoutY="94.0" mnemonicParsing="false" onAction="#endSim" text="End" textAlignment="CENTER" />
-            <TextArea fx:id="motoscfg" layoutX="8.0" layoutY="177.0" prefColumnCount="10" prefHeight="17.0"  prefRowCount="1" prefWidth="166.0" promptText="millis: 500" />
+            <TextArea fx:id="motoscfg" layoutX="8.0" layoutY="177.0" prefColumnCount="10" prefHeight="17.0" prefRowCount="1" prefWidth="166.0" promptText="millis: 500" />
             <Label layoutX="8.0" layoutY="149.0" text="Moto spawn period" />
             <TextArea fx:id="carscfg" layoutX="8.0" layoutY="299.0" prefColumnCount="10" prefHeight="25.0" prefRowCount="1" prefWidth="166.0" promptText="millis: 1000" />
             <Label layoutX="8.0" layoutY="274.0" text="Car spawn period" />

@@ -31,7 +31,7 @@ public class CarJaba extends Entity implements SimpleAI {
     }
     public CarJaba(Pane pane){
         view.resize(this.getSizeX(), this.getSizeY());
-        setRandomLocationWithBounds(pane.getWidth() - this.sizeX, pane.getHeight() + this.sizeY);
+        setRandomLocationWithBounds(pane.getWidth() - this.getSizeX(), pane.getHeight()  - sizeY);
         pane.getChildren().add(view);
     }
     public CarJaba(Pane pane, double x, double y){
@@ -56,20 +56,20 @@ public class CarJaba extends Entity implements SimpleAI {
     public void setLocation(double x, double y){
         this.x = x;
         this.y = y;
-        view.setX(this.x);
-        view.setY(this.y);
+        view.setX(this.getX());
+        view.setY(this.getY());
     }
     public void setRandomLocation(){
         this.x = random.nextDouble(600);
         this.y = random.nextDouble(500);
-        view.setX(this.x);
-        view.setY(this.y);
+        view.setX(this.getX());
+        view.setY(this.getY());
     }
     public void setRandomLocationWithBounds(double maxX, double maxY){
         this.x = random.nextDouble(maxX);
         this.y = random.nextDouble(maxY);
-        view.setX(this.x);
-        view.setY(this.y);
+        view.setX(this.getX());
+        view.setY(y);
     }
 
     public static Image[] getCarImages() {

@@ -57,7 +57,6 @@ public class MainController implements Initializable {
         if(infoMenu.isSelected()){
             toadSpawner.pause();
             moduleRun();
-
         }else{
             startEnable();
             toadSpawner.end();
@@ -75,7 +74,7 @@ public class MainController implements Initializable {
 
         if(!motoscfg.getText().isEmpty())//если поле не пустое
             if(motoscfg.getText().matches("\\d+"))//и содержит только цифры
-                if(Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
+                if(Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
                     toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
                 else
                     toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
