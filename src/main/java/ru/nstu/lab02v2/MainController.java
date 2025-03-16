@@ -70,43 +70,52 @@ public class MainController implements Initializable {
         endEnable();
         boolean passed = true;
 
-        toadSpawner.setCarSpawnChance(carSpawnChanceComboBox.getSelectionModel().getSelectedItem());
+        toadSpawner.setCarSpawnChance(carSpawnChanceComboBox.getSelectionModel().getSelectedItem());//задание значений из комбо0боксов
         toadSpawner.setMotoSpawnChance(motoSpawnChanceComboBox.getSelectionModel().getSelectedItem());
 
-        if(!motoscfg.getText().isEmpty())
-            if(motoscfg.getText().matches("\\d+"))
-                toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));
+        if(!motoscfg.getText().isEmpty())//если поле не пустое
+            if(motoscfg.getText().matches("\\d+"))//и содержит только цифры
+                if(Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
+                    toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
+                else
+                    toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
             else
                 passed = false;
 
-        if(!carscfg.getText().isEmpty())
-            if(carscfg.getText().matches("\\d+"))
-                toadSpawner.setCarSpawnPeriod(Integer.parseInt(carscfg.getText()));
+        if(!carscfg.getText().isEmpty())//если поле не пустое
+            if(carscfg.getText().matches("\\d+"))//и содержит только цифры
+                if(Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
+                    toadSpawner.setCarSpawnPeriod(Integer.parseInt(carscfg.getText()));//то присваиваем периоду число из поля
+                else
+                    toadSpawner.setCarSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
             else
                 passed = false;
 
         if(passed)
-            toadSpawner.start();
+            toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
         else{
             moduleRun();
             module.setInfo("Number isn't integer or it's too big");
             module.cancelButtonDisable();
         }
     }
+    //вызов модульного окна
     public void moduleRun() throws IOException {
-        module = new Module();//вызов модульного меню
+        module = new Module();
         module.setToadSpawner(toadSpawner);
         module.setMainController(this);
         module.start((Stage) timerLabel.getScene().getWindow());
     }
-    public void startEnable(){//включает кнопку старт
+    //включает кнопку старт
+    public void startEnable(){
         startButton.setDisable(false);
         startMenu.setDisable(false);
         endButton.setDisable(true);
         endMenu.setDisable(true);
         startButton.requestFocus();
     }
-    public void endEnable(){//выключает кнопку старт
+    //выключает кнопку старт
+    public void endEnable(){
         startButton.setDisable(true);
         startMenu.setDisable(true);
         endMenu.setDisable(false);
@@ -128,8 +137,8 @@ public class MainController implements Initializable {
         carSpawnChanceComboBox.getSelectionModel().select( (Integer) toadSpawner.getCarSpawnChance());
         motoSpawnChanceComboBox.getSelectionModel().select( (Integer) toadSpawner.getMotoSpawnChance());
 
-        carscfg.setPromptText("millis: " + toadSpawner.getCarSpawnPeriod());
-        motoscfg.setPromptText("millis: " + toadSpawner.getMotoSpawnPeriod());
+        carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
+        motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));
         carscfg.setWrapText(true);
         motoscfg.setWrapText(true);
         //кнопки конца симуляции сначала недоступны
