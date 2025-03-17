@@ -5,6 +5,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import ru.nstu.lab02v2.Add.ToadSpawner;
@@ -151,5 +153,34 @@ public class MainController implements Initializable {
         showTimerRB.selectedProperty().bindBidirectional(showTimerRBMenu.selectedProperty());
         //зависимость видимости текста от выбора радио-кнопки
         timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
+
+        this.field.sceneProperty().addListener((observable, oldScene, newScene) -> { //реализация кнопок из lab1
+            if (newScene != null) {
+                newScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                    public void handle(KeyEvent keyEvent) {
+                        switch (keyEvent.getCode()) {
+                            case B:
+                                try {
+                                    startSim(new ActionEvent());
+                                }
+                                catch (IOException exception) {}
+                                break;
+                            case E:
+                                try {
+                                    endSim(new ActionEvent());
+                                }
+                                catch (IOException exception) {}
+                                break;
+                            case T:
+                                showTimerRB.setSelected(!showTimerRB.isSelected());
+                                hideTimerRB.setSelected(!showTimerRB.isSelected());
+                                break;
+                            default:
+                                System.out.println(keyEvent.getCode());
+                        }
+                    }
+                });
+            }
+        });
     }
 }

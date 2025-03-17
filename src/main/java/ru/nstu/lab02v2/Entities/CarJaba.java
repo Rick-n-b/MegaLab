@@ -10,6 +10,7 @@ import ru.nstu.lab02v2.Main;
 import java.util.Objects;
 
 public class CarJaba extends Entity implements SimpleAI {
+
     public static Image[] carImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad2.png")), 150, 150, true, true)
@@ -31,7 +32,7 @@ public class CarJaba extends Entity implements SimpleAI {
     }
     public CarJaba(Pane pane){
         view.resize(this.getSizeX(), this.getSizeY());
-        setRandomLocationWithBounds(pane.getWidth() - this.getSizeX(), pane.getHeight()  - sizeY);
+        setRandomLocationWithBounds(pane.getWidth() - this.sizeX, pane.getHeight()  - this.sizeY);
         pane.getChildren().add(view);
     }
     public CarJaba(Pane pane, double x, double y){
@@ -68,8 +69,8 @@ public class CarJaba extends Entity implements SimpleAI {
     public void setRandomLocationWithBounds(double maxX, double maxY){
         this.x = random.nextDouble(maxX);
         this.y = random.nextDouble(maxY);
-        view.setX(this.getX());
-        view.setY(y);
+        view.setX(this.x);
+        view.setY(this.y);
     }
 
     public static Image[] getCarImages() {
