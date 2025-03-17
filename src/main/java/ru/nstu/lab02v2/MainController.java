@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.module.Module;
+import javafx.scene.control.Tooltip;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,75 +32,104 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    @FXML public SplitPane          turboBox;//общая коробка
-    @FXML public ComboBox<Integer>  carSpawnChanceComboBox;
-    @FXML public ComboBox<Integer>  motoSpawnChanceComboBox;
-    @FXML public TextArea           carscfg;//период спавна жабамашин
-    @FXML public Button             endButton;
-    @FXML public MenuItem           endMenu;//кнопка конца симуляции (меню)
-    @FXML public MenuItem           exitMenu;//кнопка выхода в меню
-    @FXML public AnchorPane         field;//поле спавна жаб
-    @FXML public MenuItem           helpMenuButton;//
-    @FXML public RadioButton        hideTimerRB;//скрыть таймер
-    @FXML public RadioButton        showTimerRB;//показать таймер
-    @FXML public RadioMenuItem      showTimerRBMenu;//показать таймер (меню)
-    @FXML public RadioMenuItem      hideTimerRBMenu;//скрыть таймер (меню)
-    @FXML public CheckMenuItem      infoMenu;//показать сводку
-    @FXML public AnchorPane         interfacePane;//коробка меню
-    @FXML public MenuBar            mainMenu;//меню
-    @FXML public TextArea           motoscfg;//период спавна жабамотоциклов
-    @FXML public Button             startButton;//кнопка начала симуляции
-    @FXML public MenuItem           startMenu;//кнопка начала симуляции (меню)
-    @FXML public Label              timerLabel;//текстовое поле для времени
-    @FXML public ToggleGroup        timerShow;//группа радио-кнопок
+    @FXML
+    public SplitPane turboBox;//общая коробка
+    @FXML
+    public ComboBox<Integer> carSpawnChanceComboBox;
+    @FXML
+    public ComboBox<Integer> motoSpawnChanceComboBox;
+    @FXML
+    public TextArea carscfg;//период спавна жабамашин
+    @FXML
+    public Button endButton;
+    @FXML
+    public MenuItem endMenu;//кнопка конца симуляции (меню)
+    @FXML
+    public MenuItem exitMenu;//кнопка выхода в меню
+    @FXML
+    public AnchorPane field;//поле спавна жаб
+    @FXML
+    public MenuItem helpMenuButton;//
+    @FXML
+    public RadioButton hideTimerRB;//скрыть таймер
+    @FXML
+    public RadioButton showTimerRB;//показать таймер
+    @FXML
+    public RadioMenuItem showTimerRBMenu;//показать таймер (меню)
+    @FXML
+    public RadioMenuItem hideTimerRBMenu;//скрыть таймер (меню)
+    @FXML
+    public CheckMenuItem infoMenu;//показать сводку
+    @FXML
+    public AnchorPane interfacePane;//коробка меню
+    @FXML
+    public MenuBar mainMenu;//меню
+    @FXML
+    public TextArea motoscfg;//период спавна жабамотоциклов
+    @FXML
+    public Button startButton;//кнопка начала симуляции
+    @FXML
+    public MenuItem startMenu;//кнопка начала симуляции (меню)
+    @FXML
+    public Label timerLabel;//текстовое поле для времени
+    @FXML
+    public ToggleGroup timerShow;//группа радио-кнопок
 
     ToadSpawner toadSpawner = new ToadSpawner(field);
     Module module;
-    @FXML void endSim(ActionEvent event) throws IOException {//конец симуляции
-        if(infoMenu.isSelected()){
+
+    @FXML
+    void endSim(ActionEvent event) throws IOException {//конец симуляции
+        if (infoMenu.isSelected()) {
             toadSpawner.pause();
             moduleRun();
-        }else{
+        } else {
             startEnable();
             toadSpawner.end();
         }
     }
-    @FXML void exit(ActionEvent event) {//выход из приложения через меню
+
+    @FXML
+    void exit(ActionEvent event) {//выход из приложения через меню
         Platform.exit();
     }
-    @FXML void startSim(ActionEvent event) throws IOException {//старт симуляции
+
+    @FXML
+    void startSim(ActionEvent event) throws IOException {//старт симуляции
         endEnable();
         boolean passed = true;
 
         toadSpawner.setCarSpawnChance(carSpawnChanceComboBox.getSelectionModel().getSelectedItem());//задание значений из комбо0боксов
         toadSpawner.setMotoSpawnChance(motoSpawnChanceComboBox.getSelectionModel().getSelectedItem());
 
-        if(!motoscfg.getText().isEmpty())//если поле не пустое
-            if(motoscfg.getText().matches("\\d+"))//и содержит только цифры
-                if(Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
-                    toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
+        if (!motoscfg.getText().isEmpty())//если поле не пустое
+            if (motoscfg.getText().matches("\\d+"))//и содержит только цифры
+                if (motoscfg.getText().charAt(0) != '0') //первый символ не 0
+                    if (Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
+                        toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
+                    else
+                        toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
                 else
-                    toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
-            else
-                passed = false;
+                    passed = false;
 
-        if(!carscfg.getText().isEmpty())//если поле не пустое
-            if(carscfg.getText().matches("\\d+"))//и содержит только цифры
-                if(Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
+        if (!carscfg.getText().isEmpty())//если поле не пустое
+            if (carscfg.getText().matches("\\d+"))//и содержит только цифры
+                if (Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
                     toadSpawner.setCarSpawnPeriod(Integer.parseInt(carscfg.getText()));//то присваиваем периоду число из поля
                 else
                     toadSpawner.setCarSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
             else
                 passed = false;
 
-        if(passed)
+        if (passed)
             toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
-        else{
+        else {
             moduleRun();
             module.setInfo("Number isn't integer or it's too big");
             module.cancelButtonDisable();
         }
     }
+
     //вызов модульного окна
     public void moduleRun() throws IOException {
         module = new Module();
@@ -107,16 +137,18 @@ public class MainController implements Initializable {
         module.setMainController(this);
         module.start((Stage) timerLabel.getScene().getWindow());
     }
+
     //включает кнопку старт
-    public void startEnable(){
+    public void startEnable() {
         startButton.setDisable(false);
         startMenu.setDisable(false);
         endButton.setDisable(true);
         endMenu.setDisable(true);
         startButton.requestFocus();
     }
+
     //выключает кнопку старт
-    public void endEnable(){
+    public void endEnable() {
         startButton.setDisable(true);
         startMenu.setDisable(true);
         endMenu.setDisable(false);
@@ -130,13 +162,13 @@ public class MainController implements Initializable {
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
 
-        for(int i = 0; i <= 100; i+=10){//задаём значения комбо-боксам
+        for (int i = 0; i <= 100; i += 10) {//задаём значения комбо-боксам
             carSpawnChanceComboBox.getItems().add(i);
             motoSpawnChanceComboBox.getItems().add(i);
         }
         //начальный выбор комбо-боксов
-        carSpawnChanceComboBox.getSelectionModel().select( (Integer) toadSpawner.getCarSpawnChance());
-        motoSpawnChanceComboBox.getSelectionModel().select( (Integer) toadSpawner.getMotoSpawnChance());
+        carSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getCarSpawnChance());
+        motoSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getMotoSpawnChance());
 
         carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
         motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));
@@ -153,6 +185,17 @@ public class MainController implements Initializable {
         showTimerRB.selectedProperty().bindBidirectional(showTimerRBMenu.selectedProperty());
         //зависимость видимости текста от выбора радио-кнопки
         timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
+
+        Tooltip ttStart = new Tooltip("press to start");
+        startButton.setTooltip(ttStart);
+        Tooltip ttStop = new Tooltip("press to stop");
+        endButton.setTooltip(ttStop);
+        Tooltip ttLabelTime = new Tooltip("enter time interval in ms");
+        motoscfg.setTooltip(ttLabelTime);
+        carscfg.setTooltip(ttLabelTime);
+        Tooltip ttSpawn = new Tooltip("chance of spawn in %");
+        motoSpawnChanceComboBox.setTooltip(ttSpawn);
+        carSpawnChanceComboBox.setTooltip(ttSpawn);
 
         this.field.sceneProperty().addListener((observable, oldScene, newScene) -> { //реализация кнопок из lab1
             if (newScene != null) {
@@ -178,6 +221,7 @@ public class MainController implements Initializable {
                             default:
                                 System.out.println(keyEvent.getCode());
                         }
+
                     }
                 });
             }

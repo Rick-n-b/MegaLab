@@ -33,7 +33,7 @@ public class MotoJaba extends Entity implements SimpleAI {
     }
     public MotoJaba(Pane pane){
         view.resize(this.getSizeX(), this.getSizeY());
-        setRandomLocationWithBounds(pane.getWidth() - this.sizeX, pane.getHeight() - this.sizeY);
+        setRandomLocationWithBounds(pane.getWidth() - this.sizeX, pane.getHeight() - this.sizeY - 150);
         pane.getChildren().add(view);
     }
     public MotoJaba(Pane pane, double x, double y){
