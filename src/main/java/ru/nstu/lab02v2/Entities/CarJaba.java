@@ -29,10 +29,12 @@ public class CarJaba extends Entity implements SimpleAI {
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
     }
-    public CarJaba(Pane pane){
+    public CarJaba(Pane pane,int id,long time){
         view.resize(this.getSizeX(), this.getSizeY());
         setRandomLocationWithBounds(pane.getWidth() - this.getSizeX(), pane.getHeight()  - sizeY - 150);
         pane.getChildren().add(view);
+        setID(id);
+        setBirthtime(time);
     }
     public CarJaba(Pane pane, double x, double y){
         view.resize(this.getSizeX(), this.getSizeY());

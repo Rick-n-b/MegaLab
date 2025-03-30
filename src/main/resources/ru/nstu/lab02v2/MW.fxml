@@ -16,7 +16,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane fx:id="turboBox" dividerPositions="0.3" minHeight="540.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.lab02v2.MainController">
+<SplitPane fx:id="turboBox" dividerPositions="0.3" minHeight="540.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.lab02v2.MainController">
   <items>
     <AnchorPane fx:id="interfacePane" maxWidth="-Infinity" minHeight="400.0" minWidth="-Infinity" prefHeight="400.0" prefWidth="180.0">
          <children>
@@ -26,6 +26,7 @@
                   <items>
                         <MenuItem fx:id="startMenu" mnemonicParsing="false" onAction="#startSim" text="Start" />
                     <MenuItem fx:id="endMenu" mnemonicParsing="false" onAction="#endSim" text="End" />
+                        <MenuItem fx:id="objmenu" mnemonicParsing="false" onAction="#showList" text="Objects" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <CheckMenuItem fx:id="infoMenu" mnemonicParsing="false" text="Show stats on end" />
                         <SeparatorMenuItem mnemonicParsing="false" />
@@ -55,19 +56,23 @@
             <Button fx:id="endButton" layoutX="72.0" layoutY="94.0" mnemonicParsing="false" onAction="#endSim" text="End" textAlignment="CENTER" />
             <TextArea fx:id="motoscfg" layoutX="8.0" layoutY="177.0" prefColumnCount="10" prefHeight="17.0" prefRowCount="1" prefWidth="166.0" promptText="millis: 500" />
             <Label layoutX="8.0" layoutY="149.0" text="Moto spawn period" />
-            <TextArea fx:id="carscfg" layoutX="8.0" layoutY="299.0" prefColumnCount="10" prefHeight="25.0" prefRowCount="1" prefWidth="166.0" promptText="millis: 1000" />
-            <Label layoutX="8.0" layoutY="274.0" text="Car spawn period" />
+            <TextArea fx:id="carscfg" layoutX="8.0" layoutY="330.0" prefColumnCount="10" prefHeight="25.0" prefRowCount="1" prefWidth="166.0" promptText="millis: 1000" />
+            <Label layoutX="8.0" layoutY="305.0" text="Car spawn period" />
             <ComboBox fx:id="motoSpawnChanceComboBox" layoutX="110.0" layoutY="229.0" prefHeight="26.0" prefWidth="65.0" promptText="0" visibleRowCount="4" />
-            <ComboBox fx:id="carSpawnChanceComboBox" layoutX="110.0" layoutY="355.0" prefHeight="26.0" prefWidth="65.0" promptText="0" visibleRowCount="4" />
-            <Label layoutX="8.0" layoutY="349.0" prefHeight="38.0" prefWidth="72.0" text="Car spawn chance " textAlignment="CENTER" wrapText="true" />
+            <ComboBox fx:id="carSpawnChanceComboBox" layoutX="110.0" layoutY="386.0" prefHeight="26.0" prefWidth="65.0" promptText="0" visibleRowCount="4" />
+            <Label layoutX="8.0" layoutY="380.0" prefHeight="38.0" prefWidth="72.0" text="Car spawn chance " textAlignment="CENTER" wrapText="true" />
             <Label layoutX="8.0" layoutY="223.0" prefHeight="39.0" prefWidth="72.0" text="Moto spawn chance" textAlignment="CENTER" wrapText="true" />
-            <RadioButton fx:id="showTimerRB" layoutX="26.0" layoutY="427.0" mnemonicParsing="false" text="Show">
+            <RadioButton fx:id="showTimerRB" layoutX="28.0" layoutY="512.0" mnemonicParsing="false" text="Show">
                <toggleGroup>
                   <ToggleGroup fx:id="timerShow" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="hideTimerRB" layoutX="27.0" layoutY="456.0" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
+            <RadioButton fx:id="hideTimerRB" layoutX="29.0" layoutY="541.0" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
             <Label fx:id="timerLabel" layoutX="53.0" layoutY="401.0" text="time" visible="false" />
-            <Label layoutX="17.0" layoutY="400.0" text="Timer" />
+            <Label layoutX="19.0" layoutY="485.0" text="Timer" />
+            <TextArea fx:id="motolife" layoutX="90.0" layoutY="262.0" prefHeight="38.0" prefWidth="84.0" promptText="millis: 10000" />
+            <Label layoutX="14.0" layoutY="272.0" text="Moto lifetime" />
+            <Label layoutX="17.0" layoutY="427.0" text="Car lifetime" />
+            <TextArea fx:id="carlife" layoutX="90.0" layoutY="425.0" prefHeight="38.0" prefWidth="84.0" promptText="millis: 20000" />
          </children></AnchorPane>
     <AnchorPane fx:id="field" minHeight="400.0" minWidth="420.0" prefHeight="600.0" prefWidth="620.0" />
   </items>

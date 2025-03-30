@@ -6,6 +6,8 @@ public abstract class Entity {
     protected double x = 0, y = 0;
     protected double sizeX = 150, sizeY = 0;
     protected static final Random random = new Random();
+    protected int ID = 0;
+    protected long birthtime = 0;
 
     public void setSizeY(double sizeY) {
         this.sizeY = sizeY;
@@ -23,6 +25,8 @@ public abstract class Entity {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
+    public void setID(int ID) {this.ID = ID;}
+    public void setBirthtime(long birthtime) {this.birthtime = birthtime;}
 
     public double getSizeX() {
         return sizeX;
@@ -36,5 +40,6 @@ public abstract class Entity {
     public double getY() {
         return y;
     }
-
+    public int getID() {return ID;}
+    public long getBirthtime() {return birthtime;}
 }

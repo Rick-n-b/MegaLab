@@ -2,8 +2,6 @@ package ru.nstu.lab02v2;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,6 +23,7 @@ import javafx.stage.Stage;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.module.Module;
 import javafx.scene.control.Tooltip;
+import ru.nstu.lab02v2.moduleList.ModuleList;
 
 import java.io.IOException;
 import java.net.URL;
@@ -75,8 +74,18 @@ public class MainController implements Initializable {
     @FXML
     public ToggleGroup timerShow;//группа радио-кнопок
 
+    @FXML
+    public MenuItem objects; //вызов окна с объектами
+
+    @FXML
+    public TextArea motolife; //время жизни мотожаб
+
+    @FXML
+    public TextArea carlife; //время жизнии машин
+
     ToadSpawner toadSpawner = new ToadSpawner(field);
     Module module;
+    ModuleList moduleList;
 
     @FXML
     void endSim(ActionEvent event) throws IOException {//конец симуляции
@@ -87,6 +96,11 @@ public class MainController implements Initializable {
             startEnable();
             toadSpawner.end();
         }
+    }
+    @FXML
+    void showList(ActionEvent event) throws IOException{ //окно с живыми объектами
+        toadSpawner.pause();
+        moduleListRun();
     }
 
     @FXML
@@ -104,13 +118,12 @@ public class MainController implements Initializable {
 
         if (!motoscfg.getText().isEmpty())//если поле не пустое
             if (motoscfg.getText().matches("\\d+"))//и содержит только цифры
-                if (motoscfg.getText().charAt(0) != '0') //первый символ не 0
-                    if (Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
-                        toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
-                    else
-                        toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
+                if (Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
+                    toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
                 else
-                    passed = false;
+                    toadSpawner.setMotoSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
+            else
+                passed = false;
 
         if (!carscfg.getText().isEmpty())//если поле не пустое
             if (carscfg.getText().matches("\\d+"))//и содержит только цифры
@@ -118,6 +131,24 @@ public class MainController implements Initializable {
                     toadSpawner.setCarSpawnPeriod(Integer.parseInt(carscfg.getText()));//то присваиваем периоду число из поля
                 else
                     toadSpawner.setCarSpawnPeriod(Integer.MAX_VALUE);//иначе установить огромный период (ничего не появляется)
+            else
+                passed = false;
+
+        if (!carlife.getText().isEmpty())
+            if (carlife.getText().matches("\\d+"))
+                if (Integer.parseInt(carlife.getText()) > 0)
+                    toadSpawner.setCarLife(Integer.parseInt(carlife.getText()));
+                else
+                    toadSpawner.setCarLife(Integer.MAX_VALUE);
+            else
+                passed = false;
+
+        if (!motolife.getText().isEmpty())//если поле не пустое
+            if (motolife.getText().matches("\\d+"))//и содержит только цифры
+                if (Integer.parseInt(motolife.getText()) > 0)//и это число больше нуля
+                    toadSpawner.setMotoLife(Integer.parseInt(motolife.getText()));
+                else
+                    toadSpawner.setMotoLife(Integer.MAX_VALUE);
             else
                 passed = false;
 
@@ -138,6 +169,13 @@ public class MainController implements Initializable {
         module.start((Stage) timerLabel.getScene().getWindow());
     }
 
+    //вызов списка объектов
+    public void moduleListRun() throws IOException {
+        moduleList = new ModuleList();
+        moduleList.setToadSpawner(toadSpawner);
+        moduleList.setMainController(this);
+        moduleList.start((Stage) timerLabel.getScene().getWindow());
+    }
     //включает кнопку старт
     public void startEnable() {
         startButton.setDisable(false);
@@ -172,6 +210,10 @@ public class MainController implements Initializable {
 
         carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
         motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));
+
+        motolife.setPromptText(String.valueOf(toadSpawner.getMotoLife()));
+        carlife.setPromptText(String.valueOf(toadSpawner.getCarLife()));
+
         carscfg.setWrapText(true);
         motoscfg.setWrapText(true);
         //кнопки конца симуляции сначала недоступны
