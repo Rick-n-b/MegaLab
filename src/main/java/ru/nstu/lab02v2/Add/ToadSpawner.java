@@ -67,10 +67,10 @@ public class ToadSpawner {
             timer.scheduleAtFixedRate(countMillis, 0, 1);//запуск таймера
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod, motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod, carSpawnPeriod);
-
+                                                                                                                    //геноцида не будет
             if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, 0,motoSpawnPeriod+1);} //установка минимальных значений
             else timer.scheduleAtFixedRate(clearMoto, 0,motoLife+1);                                   //для таймера удалений
-
+                                                                                                                    //необходимо для корректного времени срабатывания метода очистки
             if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar,0,carSpawnPeriod+1);}
             else timer.scheduleAtFixedRate(clearCar,0,carLife+1);
         }
@@ -109,8 +109,12 @@ public class ToadSpawner {
             //т.е.
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod - saveTime[1], carSpawnPeriod);
-            timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
-            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife); // поправить геноцид жаб - нельзя
+            //timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
+            if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, 0,motoSpawnPeriod+1- saveTime[2]);}
+            else timer.scheduleAtFixedRate(clearMoto, 0,motoLife+1- saveTime[2]);
+            //timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife);
+            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar,0,carSpawnPeriod+1- saveTime[3]);}
+            else timer.scheduleAtFixedRate(clearCar,0,carLife+1- saveTime[3]);
         }
       paused = false;
     }
