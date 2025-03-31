@@ -80,6 +80,8 @@ public class ToadSpawner {
         if(started){
             started = false;
             paused = false;
+            Arrays.fill(motoTypeCount, 0);
+            Arrays.fill(carTypeCount, 0);
             tasksCancel();//убийство тасков
             timer.purge();//сгорание/очистка таймера
             currentId = 1;
@@ -92,7 +94,6 @@ public class ToadSpawner {
             saveTime[1] = (System.currentTimeMillis() - spawnCar.scheduledExecutionTime());
             saveTime[2] = (System.currentTimeMillis() - clearMoto.scheduledExecutionTime());
             saveTime[3] = (System.currentTimeMillis() - clearCar.scheduledExecutionTime());
-            System.out.println(saveTime[0]);//отладка
             //убийство заданий
             tasksCancel();
             timer.purge();//сгорание таймера
@@ -109,7 +110,7 @@ public class ToadSpawner {
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod - saveTime[1], carSpawnPeriod);
             timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
-            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife);
+            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife); // поправить геноцид жаб - нельзя
         }
       paused = false;
     }
@@ -167,6 +168,7 @@ public class ToadSpawner {
                             id.remove(localid);
                             timeSpawn.remove(localid);
                             motos.get(i).die(pane);
+                            motoTypeCount[motos.get(i).type]--;
                             motos.remove(i);
                             i--;
                         }
@@ -184,6 +186,7 @@ public class ToadSpawner {
                         if(cars.get(i).getBirthtime() + carLife < localtime){
                             id.remove(localid);
                             timeSpawn.remove(localid);
+                            carTypeCount[cars.get(i).type]--;
                             cars.get(i).die(pane);
                             cars.remove(i);
                             i--;

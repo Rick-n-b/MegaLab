@@ -6,23 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.module.Module;
-import javafx.scene.control.Tooltip;
 import ru.nstu.lab02v2.moduleList.ModuleList;
 
 import java.io.IOException;
@@ -73,7 +62,8 @@ public class MainController implements Initializable {
     public Label timerLabel;//текстовое поле для времени
     @FXML
     public ToggleGroup timerShow;//группа радио-кнопок
-
+    @FXML
+    public CheckBox info;
     @FXML
     public MenuItem objects; //вызов окна с объектами
 
@@ -106,6 +96,7 @@ public class MainController implements Initializable {
     @FXML
     void exit(ActionEvent event) {//выход из приложения через меню
         Platform.exit();
+        System.exit(0);
     }
 
     @FXML
@@ -113,11 +104,11 @@ public class MainController implements Initializable {
         endEnable();
         boolean passed = true;
 
-        toadSpawner.setCarSpawnChance(carSpawnChanceComboBox.getSelectionModel().getSelectedItem());//задание значений из комбо0боксов
+        toadSpawner.setCarSpawnChance(carSpawnChanceComboBox.getSelectionModel().getSelectedItem());//задание значений из комбобоксов
         toadSpawner.setMotoSpawnChance(motoSpawnChanceComboBox.getSelectionModel().getSelectedItem());
 
         if (!motoscfg.getText().isEmpty())//если поле не пустое
-            if (motoscfg.getText().matches("\\d+"))//и содержит только цифры
+            if (motoscfg.getText().matches("^[1-9]\\d{0,4}$"))//и содержит только цифры
                 if (Integer.parseInt(motoscfg.getText()) > 0)//и это число больше нуля
                     toadSpawner.setMotoSpawnPeriod(Integer.parseInt(motoscfg.getText()));//то присваиваем периоду число из поля
                 else
@@ -126,7 +117,7 @@ public class MainController implements Initializable {
                 passed = false;
 
         if (!carscfg.getText().isEmpty())//если поле не пустое
-            if (carscfg.getText().matches("\\d+"))//и содержит только цифры
+            if (carscfg.getText().matches("^[1-9]\\d{0,4}$"))//и содержит только цифры
                 if (Integer.parseInt(carscfg.getText()) > 0)//и это число больше нуля
                     toadSpawner.setCarSpawnPeriod(Integer.parseInt(carscfg.getText()));//то присваиваем периоду число из поля
                 else
@@ -135,7 +126,7 @@ public class MainController implements Initializable {
                 passed = false;
 
         if (!carlife.getText().isEmpty())
-            if (carlife.getText().matches("\\d+"))
+            if (carlife.getText().matches("^[1-9]\\d{0,4}$"))
                 if (Integer.parseInt(carlife.getText()) > 0)
                     toadSpawner.setCarLife(Integer.parseInt(carlife.getText()));
                 else
@@ -144,7 +135,7 @@ public class MainController implements Initializable {
                 passed = false;
 
         if (!motolife.getText().isEmpty())//если поле не пустое
-            if (motolife.getText().matches("\\d+"))//и содержит только цифры
+            if (motolife.getText().matches("^[1-9]\\d{0,4}$"))//и содержит только цифры
                 if (Integer.parseInt(motolife.getText()) > 0)//и это число больше нуля
                     toadSpawner.setMotoLife(Integer.parseInt(motolife.getText()));
                 else
@@ -227,6 +218,7 @@ public class MainController implements Initializable {
         showTimerRB.selectedProperty().bindBidirectional(showTimerRBMenu.selectedProperty());
         //зависимость видимости текста от выбора радио-кнопки
         timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
+        infoMenu.selectedProperty().bindBidirectional(info.selectedProperty());
 
         Tooltip ttStart = new Tooltip("press to start");
         startButton.setTooltip(ttStart);
@@ -238,6 +230,13 @@ public class MainController implements Initializable {
         Tooltip ttSpawn = new Tooltip("chance of spawn in %");
         motoSpawnChanceComboBox.setTooltip(ttSpawn);
         carSpawnChanceComboBox.setTooltip(ttSpawn);
+
+        try {
+            startSim(new ActionEvent());
+            endSim(new ActionEvent());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         this.field.sceneProperty().addListener((observable, oldScene, newScene) -> { //реализация кнопок из lab1
             if (newScene != null) {
