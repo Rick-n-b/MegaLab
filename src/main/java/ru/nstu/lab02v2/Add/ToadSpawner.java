@@ -109,8 +109,12 @@ public class ToadSpawner {
             //т.е.
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod - saveTime[1], carSpawnPeriod);
-            timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
-            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife); // поправить геноцид жаб - нельзя
+
+            if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, motoSpawnPeriod+1- saveTime[2] ,motoSpawnPeriod+1);} //установка минимальных значений
+            else timer.scheduleAtFixedRate(clearMoto, motoLife+1- saveTime[2] ,motoLife+1);
+
+            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar,carSpawnPeriod+1- saveTime[3],carSpawnPeriod+1);}
+            else timer.scheduleAtFixedRate(clearCar,carLife+1- saveTime[3],carLife+1);
         }
       paused = false;
     }
