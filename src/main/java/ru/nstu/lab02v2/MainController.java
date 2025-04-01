@@ -73,7 +73,7 @@ public class MainController implements Initializable {
     @FXML
     public TextArea carlife; //время жизнии машин
 
-    ToadSpawner toadSpawner = new ToadSpawner(field);
+    ToadSpawner toadSpawner;
     Module module;
     ModuleList moduleList;
 
@@ -187,6 +187,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        toadSpawner = toadSpawner.getInstance(field);
         toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));

@@ -18,7 +18,7 @@ public class MotoJaba extends Entity implements SimpleAI {
     };
     public final int type = random.nextInt(motoImages.length);
     private ImageView view = new ImageView(motoImages[type]);
-
+    //группировка stream groupBy - подсчёт статистики
     public MotoJaba(){
         view.resize(this.getSizeX(), this.getSizeY());
     }

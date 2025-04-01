@@ -3,6 +3,8 @@ package ru.nstu.lab02v2.Add;
 import java.util.Random;
 
 public abstract class Entity {
+    //hashcode equals переопределение
+    //class propeties для пятой лабы(плюс искать в тг)
     protected double x = 0, y = 0;
     protected double sizeX = 150, sizeY = 150;
     protected static final Random random = new Random();

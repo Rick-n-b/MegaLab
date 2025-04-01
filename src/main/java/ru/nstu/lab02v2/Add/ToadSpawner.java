@@ -10,8 +10,11 @@ import java.awt.desktop.SystemEventListener;
 import java.util.*;
 
 public class ToadSpawner {
+    private static ToadSpawner toadSpawner;
+
     private ArrayList<MotoJaba> motos;//массив всех мотоциклов
-    private ArrayList<CarJaba> cars;
+    private ArrayList<CarJaba> cars;//jaba instanceof MotoJaba - объединить
+
     private HashSet<Integer> id; //коллекция с идентификаторами
     private TreeMap<Integer, Long> timeSpawn; //с временем
 
@@ -48,7 +51,13 @@ public class ToadSpawner {
     long saveTime[] = new long[4];
 
     // конструктор
-    public ToadSpawner(Pane pane){
+    public static ToadSpawner getInstance(Pane pane){
+        if(toadSpawner == null)
+            toadSpawner = new ToadSpawner(pane);
+        return  toadSpawner;
+    }
+
+    private ToadSpawner(Pane pane){
         motos = new ArrayList<>();
         cars = new ArrayList<>();
         id = new HashSet<>();
@@ -127,7 +136,7 @@ public class ToadSpawner {
             public void run() {
                 Platform.runLater(()-> {
                             millis++;
-                            millisProperty.set(String.format("%02d:%02d:%03d", millis / 60000, millis / 1000, millis % 1000));
+                            millisProperty.set(String.format("%02d:%02d:%03d", (millis / 60000) % 60, (millis / 1000) % 60, millis % 1000));
                         }
                 );
             }
