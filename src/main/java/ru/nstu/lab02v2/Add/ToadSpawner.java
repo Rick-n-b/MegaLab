@@ -10,11 +10,8 @@ import java.awt.desktop.SystemEventListener;
 import java.util.*;
 
 public class ToadSpawner {
-    private static ToadSpawner toadSpawner;
-
     private ArrayList<MotoJaba> motos;//массив всех мотоциклов
-    private ArrayList<CarJaba> cars;//jaba instanceof MotoJaba - объединить
-
+    private ArrayList<CarJaba> cars;
     private HashSet<Integer> id; //коллекция с идентификаторами
     private TreeMap<Integer, Long> timeSpawn; //с временем
 
@@ -51,13 +48,7 @@ public class ToadSpawner {
     long saveTime[] = new long[4];
 
     // конструктор
-    public static ToadSpawner getInstance(Pane pane){
-        if(toadSpawner == null)
-            toadSpawner = new ToadSpawner(pane);
-        return  toadSpawner;
-    }
-
-    private ToadSpawner(Pane pane){
+    public ToadSpawner(Pane pane){
         motos = new ArrayList<>();
         cars = new ArrayList<>();
         id = new HashSet<>();
@@ -118,12 +109,8 @@ public class ToadSpawner {
             //т.е.
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod - saveTime[1], carSpawnPeriod);
-
-            if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, motoSpawnPeriod+1- saveTime[2] ,motoSpawnPeriod+1);} //установка минимальных значений
-            else timer.scheduleAtFixedRate(clearMoto, motoLife+1- saveTime[2] ,motoLife+1);
-
-            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar,carSpawnPeriod+1- saveTime[3],carSpawnPeriod+1);}
-            else timer.scheduleAtFixedRate(clearCar,carLife+1- saveTime[3],carLife+1);
+            timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
+            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife); // поправить геноцид жаб - нельзя
         }
       paused = false;
     }
@@ -136,7 +123,7 @@ public class ToadSpawner {
             public void run() {
                 Platform.runLater(()-> {
                             millis++;
-                            millisProperty.set(String.format("%02d:%02d:%03d", (millis / 60000) % 60, (millis / 1000) % 60, millis % 1000));
+                            millisProperty.set(String.format("%02d:%02d:%03d", millis / 60000, millis / 1000, millis % 1000));
                         }
                 );
             }
