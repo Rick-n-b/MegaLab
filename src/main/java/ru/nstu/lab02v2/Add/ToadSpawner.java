@@ -6,10 +6,12 @@ import javafx.scene.layout.Pane;
 import ru.nstu.lab02v2.Entities.CarJaba;
 import ru.nstu.lab02v2.Entities.MotoJaba;
 
-import java.awt.desktop.SystemEventListener;
 import java.util.*;
 
 public class ToadSpawner {
+    public static ToadSpawner instance;
+
+    private ArrayList<BaseAI> jabas;
     private ArrayList<MotoJaba> motos;//массив всех мотоциклов
     private ArrayList<CarJaba> cars;
     private HashSet<Integer> id; //коллекция с идентификаторами
@@ -38,6 +40,8 @@ public class ToadSpawner {
 
     private Timer timer = new Timer("AllTheTimer");//создание пустого таймера
 
+    private TimerTask killMoto;
+
     private TimerTask countMillis;//объявление задания счёта миллисекунд
     private TimerTask spawnMoto;//объявление задания спавна мотожаб
     private TimerTask spawnCar;
@@ -48,9 +52,17 @@ public class ToadSpawner {
     long saveTime[] = new long[4];
 
     // конструктор
-    public ToadSpawner(Pane pane){
+    public static ToadSpawner getInstance(Pane pane) {
+        if(instance == null){
+            instance = new ToadSpawner(pane);
+        }
+        return instance;
+    }
+
+    private ToadSpawner(Pane pane){
         motos = new ArrayList<>();
         cars = new ArrayList<>();
+        jabas = new ArrayList<>();
         id = new HashSet<>();
         timeSpawn = new TreeMap<>();
         this.pane = pane;
@@ -69,12 +81,13 @@ public class ToadSpawner {
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod, carSpawnPeriod);
 
             if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, 0,motoSpawnPeriod+1);} //установка минимальных значений
-            else timer.scheduleAtFixedRate(clearMoto, 0,motoLife+1);                                   //для таймера удалений
+            else timer.scheduleAtFixedRate(clearMoto, 0, motoLife+1);                                   //для таймера удалений
 
-            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar,0,carSpawnPeriod+1);}
-            else timer.scheduleAtFixedRate(clearCar,0,carLife+1);
+            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar, 0, carSpawnPeriod+1);}
+            else timer.scheduleAtFixedRate(clearCar,0, carLife+1);
         }
     }
+
     //конец симуляции
     public void end(){
         if(started){
@@ -96,7 +109,9 @@ public class ToadSpawner {
             saveTime[3] = (System.currentTimeMillis() - clearCar.scheduledExecutionTime());
             //убийство заданий
             tasksCancel();
+            //timer.cancel();
             timer.purge();//сгорание таймера
+
         }
         paused = true;
     }
@@ -109,8 +124,12 @@ public class ToadSpawner {
             //т.е.
             timer.scheduleAtFixedRate(spawnMoto, motoSpawnPeriod - saveTime[0], motoSpawnPeriod);
             timer.scheduleAtFixedRate(spawnCar, carSpawnPeriod - saveTime[1], carSpawnPeriod);
-            timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife);
-            timer.scheduleAtFixedRate(clearCar, carLife - saveTime[3], carLife); // поправить геноцид жаб - нельзя
+
+            if(motoSpawnPeriod < motoLife){timer.scheduleAtFixedRate(clearMoto, motoSpawnPeriod - saveTime[2],motoSpawnPeriod+1);} //установка минимальных значений
+            else timer.scheduleAtFixedRate(clearMoto, motoLife - saveTime[2], motoLife+1);
+
+            if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar, carSpawnPeriod - saveTime[3], carSpawnPeriod+1);}
+            else timer.scheduleAtFixedRate(clearCar,carLife - saveTime[3], carLife+1);
         }
       paused = false;
     }
@@ -130,16 +149,38 @@ public class ToadSpawner {
         };
         //спавн мотожаб
         spawnMoto = new TimerTask() {
+
             @Override
             public void run() {
+
                 Platform.runLater(()->{
                     if(rand.nextInt(100) < motoSpawnChance){
-                        motos.add(new MotoJaba(pane,currentId, millis));
+                        BaseAI motoJaba = new MotoJaba(pane,currentId, millis);
+                        motos.add((MotoJaba) motoJaba);
                         motoTypeCount[motos.getLast().type]++;
                         id.add(currentId);
                         timeSpawn.put(currentId,millis);
                         currentId++;
+                       /*killMoto = new TimerTask() {
+                            @Override
+                            public void run() {
+                                Platform.runLater(()-> {
+                                    id.remove(motoJaba.ID);
+                                    timeSpawn.remove(motoJaba.ID);
+                                    ((MotoJaba) motoJaba).die(pane);
+                                    motoTypeCount[((MotoJaba) motoJaba).type]--;
+                                    motos.remove((MotoJaba) motoJaba);
+                                });
+                                this.cancel();
+                            }
+                        };
+                        timer.schedule(killMoto, motoLife + 1);
+                        */
+
+                        //kill.cancel();
+                        //killTimer.purge();
                     }
+
                 });
             }
         };
@@ -203,6 +244,7 @@ public class ToadSpawner {
         countMillis.cancel();
         clearMoto.cancel();
         clearCar.cancel();
+        //killMoto.cancel();
     }
     //очистка поля
     public void clear(){

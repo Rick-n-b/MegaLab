@@ -3,13 +3,13 @@ package ru.nstu.lab02v2.Entities;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Add.Entity;
-import ru.nstu.lab02v2.Add.SimpleAI;
+import ru.nstu.lab02v2.Add.BaseAI;
+import ru.nstu.lab02v2.Add.LocationSetter;
 import ru.nstu.lab02v2.Main;
 
 import java.util.Objects;
 
-public class CarJaba extends Entity implements SimpleAI {
+public class CarJaba extends BaseAI implements LocationSetter {
     public static Image[] carImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad2.png")), 150, 150, true, true)

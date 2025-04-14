@@ -3,21 +3,17 @@ package ru.nstu.lab02v2.Entities;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Add.Entity;
-import ru.nstu.lab02v2.Add.SimpleAI;
+import ru.nstu.lab02v2.Add.BaseAI;
+import ru.nstu.lab02v2.Add.LocationSetter;
 import ru.nstu.lab02v2.Main;
 
 import java.util.Objects;
-import java.util.TimerTask;
 
-public class MotoJaba extends Entity implements SimpleAI {
+public class MotoJaba extends BaseAI implements LocationSetter {
 
-    public static Image[] motoImages = {
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad1.png")), 150, 150, true, true),
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad2.png")), 150, 150, true, true)
-    };
+
     public final int type = random.nextInt(motoImages.length);
-    private ImageView view = new ImageView(motoImages[type]);
+
     //группировка stream groupBy - подсчёт статистики
     public MotoJaba(){
         view.resize(this.getSizeX(), this.getSizeY());
@@ -32,18 +28,27 @@ public class MotoJaba extends Entity implements SimpleAI {
         setLocation(x, y);
     }
     public MotoJaba(Pane pane, int id, long time){
+        view = new ImageView(motoImages[type]);
+        this.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setRandomLocationWithBounds(pane.getWidth() - this.sizeX, pane.getHeight() - this.sizeY);
         pane.getChildren().add(view);
         setID(id);
         setBirthtime(time);
+
+        moveThread = new Thread(new MoveRunnable(1), "moveMotoJaba");
+        //moveThread.isDaemon();
+        moveThread.start();
+
     }
     public MotoJaba(Pane pane, double x, double y){
+        this.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
         pane.getChildren().add(view);
     }
     public MotoJaba(Pane pane, double x, double y, double sizeX, double sizeY){
+        this.pane = pane;
         this.setSize(sizeX, sizeY);
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
