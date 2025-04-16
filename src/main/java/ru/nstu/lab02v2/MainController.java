@@ -66,6 +66,15 @@ public class MainController implements Initializable {
     public CheckBox info;
     @FXML
     public MenuItem objects; //вызов окна с объектами
+    @FXML
+    public ComboBox<Integer> motoPrio;
+    @FXML
+    public ComboBox<Integer> carPrio;
+    @FXML
+    public RadioButton carAIRB;
+    @FXML
+    public RadioButton motoAIRB;
+
 
     @FXML
     public TextArea motolife; //время жизни мотожаб
@@ -143,8 +152,11 @@ public class MainController implements Initializable {
             else
                 passed = false;
 
-        if (passed)
+        if (passed) {
             toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
+            toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
+            toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
+        }
         else {
             moduleRun();
             module.setInfo("Number isn't integer or it's too big");
@@ -152,6 +164,25 @@ public class MainController implements Initializable {
         }
     }
 
+    @FXML
+    public void setMotoPrio(ActionEvent event){
+        toadSpawner.setMotoMovePrio(motoPrio.getSelectionModel().getSelectedItem());
+    }
+    @FXML
+    public void setCarPrio(ActionEvent event){
+        toadSpawner.setCarMovePrio(carPrio.getSelectionModel().getSelectedItem());
+    }
+    @FXML
+    public void motoAction(ActionEvent event){
+        if(toadSpawner.isStarted())
+            toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
+
+    }
+    @FXML
+    public void carAction(ActionEvent event){
+        if(toadSpawner.isStarted())
+            toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
+    }
     //вызов модульного окна
     public void moduleRun() throws IOException {
         module = new Module();
@@ -187,7 +218,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        toadSpawner = toadSpawner.getInstance(field);
+        toadSpawner = ToadSpawner.getInstance(field);
         toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
@@ -195,10 +226,16 @@ public class MainController implements Initializable {
         for (int i = 0; i <= 100; i += 10) {//задаём значения комбо-боксам
             carSpawnChanceComboBox.getItems().add(i);
             motoSpawnChanceComboBox.getItems().add(i);
+            if(i != 0) {
+                motoPrio.getItems().add(i / 10);
+                carPrio.getItems().add(i / 10);
+            }
         }
         //начальный выбор комбо-боксов
         carSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getCarSpawnChance());
         motoSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getMotoSpawnChance());
+
+
 
         carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
         motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));

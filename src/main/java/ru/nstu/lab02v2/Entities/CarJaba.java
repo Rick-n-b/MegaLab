@@ -3,19 +3,15 @@ package ru.nstu.lab02v2.Entities;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Add.BaseAI;
+import ru.nstu.lab02v2.Add.Entity;
 import ru.nstu.lab02v2.Add.LocationSetter;
 import ru.nstu.lab02v2.Main;
 
 import java.util.Objects;
 
-public class CarJaba extends BaseAI implements LocationSetter {
-    public static Image[] carImages = {
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad1.png")), 150, 150, true, true),
-            new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad2.png")), 150, 150, true, true)
-    };
+public class CarJaba extends Entity implements LocationSetter {
+
     public final int type = random.nextInt(carImages.length);
-    private ImageView view = new ImageView(carImages[type]);
 
     public CarJaba(){
         view.resize(this.getSizeX(), this.getSizeY());
@@ -30,18 +26,25 @@ public class CarJaba extends BaseAI implements LocationSetter {
         setLocation(x, y);
     }
     public CarJaba(Pane pane,int id,long time){
+        view = new ImageView(carImages[type]);
+        this.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setRandomLocationWithBounds(pane.getWidth() - this.getSizeX(), pane.getHeight()  - this.getSizeY());
         pane.getChildren().add(view);
         setID(id);
         setBirthtime(time);
+
     }
     public CarJaba(Pane pane, double x, double y){
+        view = new ImageView(carImages[type]);
+        this.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
         pane.getChildren().add(view);
     }
     public CarJaba(Pane pane, double x, double y, double sizeX, double sizeY){
+        view = new ImageView(carImages[type]);
+        this.pane = pane;
         this.setSize(sizeX, sizeY);
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);

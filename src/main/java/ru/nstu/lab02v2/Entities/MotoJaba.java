@@ -3,14 +3,10 @@ package ru.nstu.lab02v2.Entities;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Add.BaseAI;
+import ru.nstu.lab02v2.Add.Entity;
 import ru.nstu.lab02v2.Add.LocationSetter;
-import ru.nstu.lab02v2.Main;
 
-import java.util.Objects;
-
-public class MotoJaba extends BaseAI implements LocationSetter {
-
+public class MotoJaba extends Entity implements LocationSetter {
 
     public final int type = random.nextInt(motoImages.length);
 
@@ -35,19 +31,16 @@ public class MotoJaba extends BaseAI implements LocationSetter {
         pane.getChildren().add(view);
         setID(id);
         setBirthtime(time);
-
-        moveThread = new Thread(new MoveRunnable(1), "moveMotoJaba");
-        //moveThread.isDaemon();
-        moveThread.start();
-
     }
     public MotoJaba(Pane pane, double x, double y){
+        view = new ImageView(motoImages[type]);;
         this.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
         pane.getChildren().add(view);
     }
     public MotoJaba(Pane pane, double x, double y, double sizeX, double sizeY){
+        view = new ImageView(motoImages[type]);;
         this.pane = pane;
         this.setSize(sizeX, sizeY);
         view.resize(this.getSizeX(), this.getSizeY());
@@ -85,4 +78,6 @@ public class MotoJaba extends BaseAI implements LocationSetter {
     public static Image[] getMotoImages() {
         return motoImages;
     }
+
+
 }
