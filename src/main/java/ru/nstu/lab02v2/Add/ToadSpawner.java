@@ -357,7 +357,4 @@ public class ToadSpawner {
     public void setId(HashSet<Integer> id) {this.id = id;}
     public void setTimeSpawn(TreeMap<Integer, Long> timeSpawn) {this.timeSpawn = timeSpawn;}
     public void setCurrentId(int currentId) {this.currentId = currentId;}
-
-
-
 }

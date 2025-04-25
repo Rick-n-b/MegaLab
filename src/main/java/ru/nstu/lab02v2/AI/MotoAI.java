@@ -34,7 +34,6 @@ public class MotoAI extends BaseAI {
                     }
                     try {
                         Thread.sleep(1000 / fps);
-                        //Thread.yield();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -44,6 +43,5 @@ public class MotoAI extends BaseAI {
     }
     public MotoAI(){
         moveThread = new Thread(new Move(), "MotoMove!");
-        //moveThread.start();
     }
 }

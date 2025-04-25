@@ -1,11 +1,5 @@
 package ru.nstu.lab02v2.AI;
 
-import javafx.application.Platform;
-import ru.nstu.lab02v2.Add.Entity;
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.TreeMap;
 //extends Thread
 public abstract class BaseAI {
 
@@ -53,45 +47,4 @@ public abstract class BaseAI {
     public int getPrio(){
         return  moveThread.getPriority();
     }
-    // = new Thread(new MoveRunnable(), "move")
 }
-
-
-
-//protected class MoveRunnable implements Runnable{
-//    int type = 1;
-//    int direction = 1;
-//    public MoveRunnable(int type){
-//        this.type = type;
-//        this.direction = new Random().nextBoolean() ? 1 : -1;
-//    }
-//
-//    @Override
-//    public synchronized void run() {
-//        Thread.yield();
-////            if (type == 1)//movex
-////                while ((x > -sizeX || x < pane.getWidth() - sizeX)) {
-////                    //synchronized ("JavaFX Application Thread") {
-////                    try {
-////                        x += direction * velocity;
-////                        view.setX(x);
-////                        Thread.sleep(17);
-////                    } catch (InterruptedException e) {
-////                        System.out.println(Thread.currentThread().getName() + " was interrupted!");
-////                    }
-////                    // }
-////                }
-////            else//moveY
-////                while ((y < pane.getHeight() + sizeY || y > -sizeY)) {
-////                    try {
-////                        y += direction * velocity;
-////                        view.setY(y);
-////                        Thread.sleep(17);
-////                    } catch (InterruptedException e) {
-////                        System.out.println(Thread.currentThread().getName() + " was interrupted!");
-////                    }
-////
-////                }
-//        Thread.currentThread().interrupt();
-//    }
-//}
