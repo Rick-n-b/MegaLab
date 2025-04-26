@@ -15,7 +15,6 @@ import ru.nstu.lab02v2.Add.ToadSpawner;
 import java.io.IOException;
 
 public class Main extends Application {
-    ToadSpawner toadSpawner;
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MW.fxml"));
@@ -31,6 +30,8 @@ public class Main extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
+                ToadSpawner toadSpawner = ToadSpawner.getInstance(mainController.field);
+                toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
                 Platform.exit();
                 System.exit(0);
             }

@@ -1,12 +1,14 @@
 package ru.nstu.lab02v2.AI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.Entities.CarJaba;
 
 import java.util.Random;
 
 public class CarAI extends BaseAI {
-    ToadSpawner toadSpawner = ToadSpawner.getInstance();
+    @JsonIgnore
+    private static ToadSpawner toadSpawner;
     private class Move implements Runnable{
         @Override
         public void run(){
@@ -43,6 +45,7 @@ public class CarAI extends BaseAI {
         }
     }
     public CarAI(){
+        toadSpawner = ToadSpawner.getInstance();
         moveThread = new Thread(new Move(), "CarMove!");
         //moveThread.start();
     }

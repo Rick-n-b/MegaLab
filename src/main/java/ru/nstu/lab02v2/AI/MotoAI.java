@@ -1,12 +1,14 @@
 package ru.nstu.lab02v2.AI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.Entities.MotoJaba;
 
 import java.util.Random;
 
 public class MotoAI extends BaseAI {
-    ToadSpawner toadSpawner = ToadSpawner.getInstance();
+    @JsonIgnore
+    private static ToadSpawner toadSpawner;
     private class Move implements Runnable{
         @Override
         public void run(){
@@ -42,6 +44,7 @@ public class MotoAI extends BaseAI {
         }
     }
     public MotoAI(){
+        toadSpawner  = ToadSpawner.getInstance();
         moveThread = new Thread(new Move(), "MotoMove!");
     }
 }

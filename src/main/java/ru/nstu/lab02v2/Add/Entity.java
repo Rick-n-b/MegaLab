@@ -1,5 +1,6 @@
 package ru.nstu.lab02v2.Add;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,18 +15,21 @@ public abstract class Entity {
     //class propeties для пятой лабы(плюс искать в тг)
     protected double x = 0, y = 0;
     protected double sizeX = 150, sizeY = 150;
+    @JsonIgnore
     protected static final Random random = new Random();
+    @JsonIgnore
     protected static Pane pane = null;
     public int ID = 0;
     protected long birthtime = 0;
     protected double velocity = 3;
     public boolean isDirectionSet = false;
     protected ImageView view;
-
+    @JsonIgnore
     public static Image[] motoImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad2.png")), 150, 150, true, true)
     };
+    @JsonIgnore
     public static Image[] carImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad2.png")), 150, 150, true, true)

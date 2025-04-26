@@ -68,7 +68,7 @@
                   <ToggleGroup fx:id="timerShow" />
                </toggleGroup></RadioButton>
             <RadioButton fx:id="hideTimerRB" layoutX="7.0" layoutY="459.0" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$timerShow" />
-            <Label fx:id="timerLabel" layoutX="80.0" layoutY="391.0" prefHeight="39.0" prefWidth="61.0" text="time" visible="false" />
+            <Label fx:id="timerLabel" layoutX="50.0" layoutY="391.0" prefHeight="39.0" prefWidth="61.0" text="time" visible="false" />
             <Label layoutX="18.0" layoutY="402.0" text="Timer" />
             <TextArea fx:id="motolife" layoutX="88.0" layoutY="189.0" prefHeight="38.0" prefWidth="84.0" promptText="millis: 10000" />
             <Label layoutX="12.0" layoutY="199.0" text="Moto lifetime" />

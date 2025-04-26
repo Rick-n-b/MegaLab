@@ -75,7 +75,6 @@ public class MainController implements Initializable {
     @FXML
     public RadioButton motoAIRB;
 
-
     @FXML
     public TextArea motolife; //время жизни мотожаб
 
@@ -104,6 +103,7 @@ public class MainController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {//выход из приложения через меню
+        toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         Platform.exit();
         System.exit(0);
     }
@@ -156,6 +156,7 @@ public class MainController implements Initializable {
             toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
             toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
             toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
+            //toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         }
         else {
             moduleRun();
@@ -220,6 +221,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         toadSpawner = ToadSpawner.getInstance(field);
         toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
+        toadSpawner.loadConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
 
@@ -234,8 +236,6 @@ public class MainController implements Initializable {
         //начальный выбор комбо-боксов
         carSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getCarSpawnChance());
         motoSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getMotoSpawnChance());
-
-
 
         carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
         motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));
@@ -257,6 +257,10 @@ public class MainController implements Initializable {
         //зависимость видимости текста от выбора радио-кнопки
         timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
         infoMenu.selectedProperty().bindBidirectional(info.selectedProperty());
+
+
+        motoPrio.getSelectionModel().select(toadSpawner.getMotoAI().getPrio() - 1);
+        carPrio .getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
 
         Tooltip ttStart = new Tooltip("press to start");
         startButton.setTooltip(ttStart);
@@ -297,10 +301,7 @@ public class MainController implements Initializable {
                                 showTimerRB.setSelected(!showTimerRB.isSelected());
                                 hideTimerRB.setSelected(!showTimerRB.isSelected());
                                 break;
-                            default:
-                                System.out.println(keyEvent.getCode());
                         }
-
                     }
                 });
             }

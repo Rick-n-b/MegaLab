@@ -1,5 +1,7 @@
 package ru.nstu.lab02v2.AI;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //extends Thread
 public abstract class BaseAI {
 
@@ -23,6 +25,7 @@ public abstract class BaseAI {
 
     }
 
+    @JsonIgnore
     protected Thread moveThread;
 
     public void setDisabled(boolean disabled){

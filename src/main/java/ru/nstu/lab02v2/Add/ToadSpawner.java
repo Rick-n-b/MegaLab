@@ -1,5 +1,6 @@
 package ru.nstu.lab02v2.Add;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Pane;
@@ -8,12 +9,16 @@ import ru.nstu.lab02v2.AI.MotoAI;
 import ru.nstu.lab02v2.Entities.CarJaba;
 import ru.nstu.lab02v2.Entities.MotoJaba;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class ToadSpawner {
+    @JsonIgnore
     public static ToadSpawner instance;
 
-    private ArrayList<Entity> jabas;
     private ArrayList<MotoJaba> motos;//массив всех мотоциклов
     private ArrayList<CarJaba> cars;
     private HashSet<Integer> id; //коллекция с идентификаторами
@@ -22,7 +27,7 @@ public class ToadSpawner {
     /*массив типов мотоциклов(автоматически расширяемый)
     каждому типу - ячейка массива, в которой лежит кол-во объектов этого типа*/
     private int[] motoTypeCount = new int[MotoJaba.getMotoImages().length];
-    private int[] carTypeCount = new int[CarJaba.getCarImages().length];
+    private int[] carTypeCount  = new int[CarJaba.getCarImages().length];
 
     private int currentId = 1; //текущий идентификатор
 
@@ -35,24 +40,23 @@ public class ToadSpawner {
     private int motoSpawnChance = 70, carSpawnChance = 40;//шанс спавна в процентах
     private int motoLife = 2000, carLife = 4000; //время жизни в миллисекундах
 
+    @JsonIgnore
     private final static Random rand = new Random();//переменная рандома
 
     private Boolean paused = false;//переменная, отслеживающая поставлена ли симуляция на паузу
     private Boolean started = false;//переменная, отслеживающая запущена ли симуляция
 
+    @JsonIgnore
     private Timer timer = new Timer("AllTheTimer");//создание пустого таймера
 
-    private TimerTask killMoto;
-
-    private TimerTask countMillis;//объявление задания счёта миллисекунд
-    private TimerTask spawnMoto;//объявление задания спавна мотожаб
-    private TimerTask spawnCar;
-    private TimerTask clearMoto; //очистка лишних объектов
-    private TimerTask clearCar;
+    @JsonIgnore private TimerTask countMillis;//объявление задания счёта миллисекунд
+    @JsonIgnore private TimerTask spawnMoto;//объявление задания спавна мотожаб
+    @JsonIgnore private TimerTask spawnCar;
+    @JsonIgnore private TimerTask clearMoto; //очистка лишних объектов
+    @JsonIgnore private TimerTask clearCar;
 
     //"сохранённое" время с последнего запуска задания у таймера: 0 - для мото, 1 - машино - жаб
     long saveTime[] = new long[4];
-
 
     private MotoAI motoAI;
     private CarAI carAI;
@@ -60,12 +64,16 @@ public class ToadSpawner {
     public static ToadSpawner getInstance(Pane pane) {
         if(instance == null){
             instance = new ToadSpawner(pane);
+            instance.carAI = new CarAI();
+            instance.motoAI = new MotoAI();
         }
         return instance;
     }
     public static ToadSpawner getInstance() {
         if(instance == null){
             instance = new ToadSpawner();
+            instance.carAI = new CarAI();
+            instance.motoAI = new MotoAI();
         }
         return instance;
     }
@@ -73,18 +81,19 @@ public class ToadSpawner {
     private ToadSpawner(Pane pane){
         motos = new ArrayList<>();
         cars = new ArrayList<>();
-        jabas = new ArrayList<>();
         id = new HashSet<>();
         timeSpawn = new TreeMap<>();
+
         this.pane = pane;
     }
     private ToadSpawner(){
         motos = new ArrayList<>();
         cars = new ArrayList<>();
-        jabas = new ArrayList<>();
         id = new HashSet<>();
         timeSpawn = new TreeMap<>();
+
     }
+
 
     //запуск симуляции
     public void start(){
@@ -103,10 +112,7 @@ public class ToadSpawner {
 
             if(carSpawnPeriod < carLife){timer.scheduleAtFixedRate(clearCar, 0, carSpawnPeriod+1);}
             else timer.scheduleAtFixedRate(clearCar,0, carLife+1);
-            if(motoAI == null)
-                motoAI = new MotoAI();
-            if(carAI == null)
-                carAI = new CarAI();
+
 
         }
     }
@@ -172,7 +178,7 @@ public class ToadSpawner {
             public void run() {
                 Platform.runLater(()-> {
                             millis++;
-                            millisProperty.set(String.format("%02d:%02d:%03d", millis / 60000, millis / 1000, millis % 1000));
+                            millisProperty.set(String.format("%02d:%02d:%03d", millis / 60000, (millis / 1000) % 60, millis % 1000));
                         }
                 );
             }
@@ -265,7 +271,6 @@ public class ToadSpawner {
         countMillis.cancel();
         clearMoto.cancel();
         clearCar.cancel();
-        //killMoto.cancel();
     }
     //очистка поля
     public void clear(){
@@ -280,11 +285,38 @@ public class ToadSpawner {
         cars.clear();
     }
 
-    public void setMotoMovePrio(int p) {
-        motoAI.setPrio(p);
+    public synchronized void saveConf(String path){
+        Properties properties = new Properties();
+        properties.setProperty("motoSpawnPeriod", String.valueOf(motoSpawnPeriod));
+        properties.setProperty("carSpawnPeriod", String.valueOf(carSpawnPeriod));
+        properties.setProperty("motoSpawnChance", String.valueOf(motoSpawnChance));
+        properties.setProperty("carSpawnChance", String.valueOf(carSpawnChance));
+        properties.setProperty("motoLife", String.valueOf(motoLife));
+        properties.setProperty("carLife", String.valueOf(carLife));
+        properties.setProperty("motoPrio", String.valueOf(motoAI.getPrio()));
+        properties.setProperty("carPrio", String.valueOf(carAI.getPrio()));
+        try {
+            properties.store(Files.newOutputStream(Path.of(path)), "ToadSpawner config file");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public void setCarMovePrio(int p){
-        carAI.setPrio(p);
+
+    public synchronized void loadConf(String path){
+        Properties properties = new Properties();
+        try {
+            properties.load(Files.newInputStream(Path.of(path)));
+            motoSpawnPeriod = Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(1000)));
+            carSpawnPeriod = Integer.parseInt(properties.getProperty("carSpawnPeriod", String.valueOf(2000)));
+            motoSpawnChance = Integer.parseInt(properties.getProperty("motoSpawnChance", String.valueOf(70)));
+            carSpawnChance = Integer.parseInt(properties.getProperty("carSpawnChance", String.valueOf(40)));
+            motoLife = Integer.parseInt(properties.getProperty("motoLife", String.valueOf(2000)));
+            carLife = Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(4000)));
+            motoAI.setPrio(Integer.parseInt(properties.getProperty("motoPrio", String.valueOf(5))));
+            carAI.setPrio(Integer.parseInt(properties.getProperty("carPrio", String.valueOf(5))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /*функции геттеры и сеттеры*/
@@ -337,6 +369,12 @@ public class ToadSpawner {
     public TreeMap<Integer, Long> getTimeSpawn() {return timeSpawn;}
     public int getCurrentId() {return currentId;}
 
+    public void setMotoMovePrio(int p) {
+        motoAI.setPrio(p);
+    }
+    public void setCarMovePrio(int p){
+        carAI.setPrio(p);
+    }
     public void setPane(Pane pane) {
         this.pane = pane;
     }
