@@ -29,8 +29,11 @@ public class ModuleListController implements Initializable{
     @FXML
     private void okPress(){
         //unpause
-        toadSpawner.unpause();
-        mainController.endEnable();
+
+        if(mainController.startButton.disableProperty().getValue()) {
+            toadSpawner.unpause();
+            mainController.endEnable();
+        }
         ((Stage) objects.getScene().getWindow()).close();
     }
 

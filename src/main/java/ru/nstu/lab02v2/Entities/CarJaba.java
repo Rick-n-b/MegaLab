@@ -14,7 +14,10 @@ public class CarJaba extends Entity implements LocationSetter {
     public final int type = random.nextInt(carImages.length);
 
     public CarJaba(){
+        view = new ImageView(carImages[type]);
         view.resize(this.getSizeX(), this.getSizeY());
+        view.setY(this.y);
+        view.setX(this.x);
     }
     public CarJaba(double x, double y){
         view.resize(this.getSizeX(), this.getSizeY());

@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.RadioMenuItem?>
@@ -42,6 +43,16 @@
                            </toggleGroup>
                         </RadioMenuItem>
                         <RadioMenuItem fx:id="hideTimerRBMenu" mnemonicParsing="false" selected="true" text="Hide" toggleGroup="$menuTimerShow" />
+                        <SeparatorMenuItem mnemonicParsing="false">
+                           <content>
+                              <MenuButton mnemonicParsing="false" text="File">
+                                <items>
+                                  <MenuItem fx:id="loadFile" mnemonicParsing="false" onAction="#loadSim" text="Load" />
+                                  <MenuItem fx:id="saveFile" mnemonicParsing="false" onAction="#saveSim" text="Save" />
+                                </items>
+                              </MenuButton>
+                           </content>
+                        </SeparatorMenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exitMenu" mnemonicParsing="false" onAction="#exit" text="Exit" />
                   </items>

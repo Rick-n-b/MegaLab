@@ -9,11 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.nstu.lab02v2.Add.ToadSpawner;
 import ru.nstu.lab02v2.module.Module;
 import ru.nstu.lab02v2.moduleList.ModuleList;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -80,6 +82,7 @@ public class MainController implements Initializable {
 
     @FXML
     public TextArea carlife; //время жизнии машин
+
 
     ToadSpawner toadSpawner;
     Module module;
@@ -156,7 +159,6 @@ public class MainController implements Initializable {
             toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
             toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
             toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
-            //toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         }
         else {
             moduleRun();
@@ -165,6 +167,32 @@ public class MainController implements Initializable {
         }
     }
 
+    @FXML
+    void saveSim(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select file to save sim data");
+        fileChooser.setInitialFileName("SimulationSave");
+        fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
+        File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
+
+        if (file != null) {
+            toadSpawner.saveSim(file.getPath());
+        }
+    }
+    @FXML
+    void loadSim(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select file to load sim data");
+        fileChooser.setInitialFileName("SimulationSave");
+        fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
+        File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
+
+        if (file != null) {
+            toadSpawner.loadSim(file.getPath(), field);
+        }
+    }
     @FXML
     public void setMotoPrio(ActionEvent event){
         toadSpawner.setMotoMovePrio(motoPrio.getSelectionModel().getSelectedItem());
@@ -201,26 +229,30 @@ public class MainController implements Initializable {
     }
     //включает кнопку старт
     public void startEnable() {
-        startButton.setDisable(false);
-        startMenu.setDisable(false);
-        endButton.setDisable(true);
-        endMenu.setDisable(true);
-        startButton.requestFocus();
+        if(startButton.disableProperty().getValue()) {
+            startButton.setDisable(false);
+            startMenu.setDisable(false);
+            endButton.setDisable(true);
+            endMenu.setDisable(true);
+            startButton.requestFocus();
+        }
     }
 
     //выключает кнопку старт
     public void endEnable() {
-        startButton.setDisable(true);
-        startMenu.setDisable(true);
-        endMenu.setDisable(false);
-        endButton.setDisable(false);
-        endButton.requestFocus();
+        if(!startButton.disableProperty().getValue()) {
+            startButton.setDisable(true);
+            startMenu.setDisable(true);
+            endMenu.setDisable(false);
+            endButton.setDisable(false);
+            endButton.requestFocus();
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         toadSpawner = ToadSpawner.getInstance(field);
-        toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
+        //toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
         toadSpawner.loadConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));

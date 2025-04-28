@@ -23,6 +23,7 @@ public abstract class Entity {
     protected long birthtime = 0;
     protected double velocity = 3;
     public boolean isDirectionSet = false;
+    @JsonIgnore
     protected ImageView view;
     @JsonIgnore
     public static Image[] motoImages = {

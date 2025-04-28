@@ -1,0 +1,83 @@
+{
+  "motos" : [ {
+    "x" : 34.76455428458853,
+    "y" : 217.48406979803028,
+    "sizeX" : 150.0,
+    "sizeY" : 150.0,
+    "ID" : 1,
+    "birthtime" : 1001,
+    "velocity" : 3.0,
+    "isDirectionSet" : false,
+    "type" : 0,
+    "id" : 1
+  }, {
+    "x" : 79.56833237757462,
+    "y" : 255.98552638786418,
+    "sizeX" : 150.0,
+    "sizeY" : 150.0,
+    "ID" : 2,
+    "birthtime" : 2001,
+    "velocity" : 3.0,
+    "isDirectionSet" : false,
+    "type" : 1,
+    "id" : 2
+  }, {
+    "x" : 173.25632682616492,
+    "y" : 235.34072609298826,
+    "sizeX" : 150.0,
+    "sizeY" : 150.0,
+    "ID" : 3,
+    "birthtime" : 3001,
+    "velocity" : 3.0,
+    "isDirectionSet" : false,
+    "type" : 1,
+    "id" : 3
+  }, {
+    "x" : 0.6662986065679548,
+    "y" : 18.33645997996162,
+    "sizeX" : 150.0,
+    "sizeY" : 150.0,
+    "ID" : 4,
+    "birthtime" : 4001,
+    "velocity" : 3.0,
+    "isDirectionSet" : false,
+    "type" : 0,
+    "id" : 4
+  }, {
+    "x" : 319.05921807034207,
+    "y" : 96.31377020536084,
+    "sizeX" : 150.0,
+    "sizeY" : 150.0,
+    "ID" : 5,
+    "birthtime" : 5001,
+    "velocity" : 3.0,
+    "isDirectionSet" : false,
+    "type" : 1,
+    "id" : 5
+  } ],
+  "cars" : [ ],
+  "id" : [ 1, 2, 3, 4, 5, 6, 7 ],
+  "timeSpawn" : {
+    "1" : 1001,
+    "2" : 2001,
+    "3" : 3001,
+    "4" : 4001,
+    "5" : 5001,
+    "6" : 6001,
+    "7" : 7001
+  },
+  "motoTypeCount" : [ 0, 0 ],
+  "carTypeCount" : [ 0, 0 ],
+  "currentId" : 1,
+  "millis" : 5382,
+  "paused" : false,
+  "started" : false,
+  "motoAI" : {
+    "disabled" : true,
+    "prio" : 10
+  },
+  "carAI" : {
+    "disabled" : true,
+    "prio" : 10
+  }
+}

@@ -12,7 +12,10 @@ public class MotoJaba extends Entity implements LocationSetter {
 
     //группировка stream groupBy - подсчёт статистики
     public MotoJaba(){
+        view = new ImageView(motoImages[type]);
         view.resize(this.getSizeX(), this.getSizeY());
+        view.setY(this.y);
+        view.setX(this.x);
     }
     public MotoJaba(double x, double y){
         view.resize(this.getSizeX(), this.getSizeY());

@@ -1,6 +1,8 @@
 package ru.nstu.lab02v2.Add;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Pane;
@@ -8,6 +10,7 @@ import ru.nstu.lab02v2.AI.CarAI;
 import ru.nstu.lab02v2.AI.MotoAI;
 import ru.nstu.lab02v2.Entities.CarJaba;
 import ru.nstu.lab02v2.Entities.MotoJaba;
+import ru.nstu.lab02v2.MainController;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,14 +34,20 @@ public class ToadSpawner {
 
     private int currentId = 1; //текущий идентификатор
 
+    @JsonIgnore
     private Pane pane;//поле спавна
 
-    public SimpleStringProperty millisProperty = new SimpleStringProperty("0");//переменная необходимая для таймера
-
     private long millis = 0;//время симуляции в миллисекундах
-    private int motoSpawnPeriod = 1000, carSpawnPeriod = 2000;//периоды спавна в миллисекундах
-    private int motoSpawnChance = 70, carSpawnChance = 40;//шанс спавна в процентах
-    private int motoLife = 2000, carLife = 4000; //время жизни в миллисекундах
+
+    @JsonIgnore private int motoSpawnPeriod = 1000;
+    @JsonIgnore private int carSpawnPeriod = 2000;//периоды спавна в миллисекундах
+    @JsonIgnore private int motoSpawnChance = 70;
+    @JsonIgnore private int carSpawnChance = 40;//шанс спавна в процентах
+    @JsonIgnore private int motoLife = 2000;
+    @JsonIgnore private int carLife = 4000; //время жизни в миллисекундах
+
+    @JsonIgnore
+    public SimpleStringProperty millisProperty = new SimpleStringProperty(String.valueOf(millis));//переменная необходимая для таймера
 
     @JsonIgnore
     private final static Random rand = new Random();//переменная рандома
@@ -61,6 +70,7 @@ public class ToadSpawner {
     private MotoAI motoAI;
     private CarAI carAI;
     // конструктор
+
     public static ToadSpawner getInstance(Pane pane) {
         if(instance == null){
             instance = new ToadSpawner(pane);
@@ -71,7 +81,7 @@ public class ToadSpawner {
     }
     public static ToadSpawner getInstance() {
         if(instance == null){
-            instance = new ToadSpawner();
+            instance = new ToadSpawner(null);
             instance.carAI = new CarAI();
             instance.motoAI = new MotoAI();
         }
@@ -86,13 +96,7 @@ public class ToadSpawner {
 
         this.pane = pane;
     }
-    private ToadSpawner(){
-        motos = new ArrayList<>();
-        cars = new ArrayList<>();
-        id = new HashSet<>();
-        timeSpawn = new TreeMap<>();
 
-    }
 
 
     //запуск симуляции
@@ -311,12 +315,43 @@ public class ToadSpawner {
             motoSpawnChance = Integer.parseInt(properties.getProperty("motoSpawnChance", String.valueOf(70)));
             carSpawnChance = Integer.parseInt(properties.getProperty("carSpawnChance", String.valueOf(40)));
             motoLife = Integer.parseInt(properties.getProperty("motoLife", String.valueOf(2000)));
-            carLife = Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(4000)));
+            carLife = Integer.parseInt(properties.getProperty("carLife", String.valueOf(4000)));
             motoAI.setPrio(Integer.parseInt(properties.getProperty("motoPrio", String.valueOf(5))));
             carAI.setPrio(Integer.parseInt(properties.getProperty("carPrio", String.valueOf(5))));
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public synchronized void saveSim(String path){
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT); // Создаем экземпляр ObjectMapper
+
+        try {
+            mapper.writeValue(new File(path), this); // Сериализуем объект в JSON файл
+            System.out.println("Данные симуляции сохранены в " + path);
+
+        } catch (IOException e) {
+            System.err.println("Ошибка при сохранении данных симуляции: " + e.getMessage());
+        }
+    }
+
+    public synchronized void loadSim(String path, Pane pane){
+        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+        try {
+            instance.pane = pane;
+            this.pane = pane;
+            instance = mapper.readValue(new File(path), ToadSpawner.class); // Десериализуем из JSON файла
+            System.out.println("Данные симуляции загружены из " + path);
+        } catch (IOException e) {
+            System.err.println("Ошибка при загрузке данных симуляции: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public String toString(){
+
+        return "moto" + motos.toArray().length;
     }
 
     /*функции геттеры и сеттеры*/

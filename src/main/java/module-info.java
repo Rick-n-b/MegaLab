@@ -2,6 +2,12 @@ module ru.nstu.lab02v2 {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
+    exports ru.nstu.lab02v2.Add;
+    exports ru.nstu.lab02v2.AI;
+    exports ru.nstu.lab02v2.Entities;
+
+    opens ru.nstu.lab02v2.Add to com.fasterxml.jackson.databind;
+
 
     exports ru.nstu.lab02v2.module;
     opens ru.nstu.lab02v2.module to javafx.fxml;

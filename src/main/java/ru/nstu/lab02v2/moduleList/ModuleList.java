@@ -30,7 +30,7 @@ public class ModuleList extends Application  {
             inf.append(entry.getKey() + " " + entry.getValue() + "\n");
         }
         return inf.toString();
-        }
+    }
 
 
 
