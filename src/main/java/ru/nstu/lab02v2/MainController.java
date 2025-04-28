@@ -156,7 +156,11 @@ public class MainController implements Initializable {
                 passed = false;
 
         if (passed) {
-            toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
+            if(toadSpawner.isPaused())
+                toadSpawner.unpause();
+            else
+                toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
+
             toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
             toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
         }
@@ -169,27 +173,31 @@ public class MainController implements Initializable {
 
     @FXML
     void saveSim(ActionEvent event) {
+        toadSpawner.pause();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to save sim data");
         fileChooser.setInitialFileName("SimulationSave");
         fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
-
         if (file != null) {
             toadSpawner.saveSim(file.getPath());
         }
+        toadSpawner.unpause();
     }
+
     @FXML
     void loadSim(ActionEvent event) {
+        toadSpawner.pause();
+        startEnable();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to load sim data");
         fileChooser.setInitialFileName("SimulationSave");
         fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
-
         if (file != null) {
+            toadSpawner.end();
             toadSpawner.loadSim(file.getPath(), field);
         }
     }
@@ -252,6 +260,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         toadSpawner = ToadSpawner.getInstance(field);
+        toadSpawner.mainController = this;
         //toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
         toadSpawner.loadConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
         //биндим таймер
