@@ -299,36 +299,49 @@ public class ToadSpawner {
     }
 
     public synchronized void saveConf(String path){
-        Properties properties = new Properties();
-        properties.setProperty("motoSpawnPeriod", String.valueOf(motoSpawnPeriod));
-        properties.setProperty("carSpawnPeriod", String.valueOf(carSpawnPeriod));
-        properties.setProperty("motoSpawnChance", String.valueOf(motoSpawnChance));
-        properties.setProperty("carSpawnChance", String.valueOf(carSpawnChance));
-        properties.setProperty("motoLife", String.valueOf(motoLife));
-        properties.setProperty("carLife", String.valueOf(carLife));
-        properties.setProperty("motoPrio", String.valueOf(motoAI.getPrio()));
-        properties.setProperty("carPrio", String.valueOf(carAI.getPrio()));
         try {
-            properties.store(Files.newOutputStream(Path.of(path)), "ToadSpawner config file");
+            if(new File(path).exists()) {
+                Properties properties = new Properties();
+                properties.setProperty("motoSpawnPeriod", String.valueOf(motoSpawnPeriod));
+                properties.setProperty("carSpawnPeriod", String.valueOf(carSpawnPeriod));
+                properties.setProperty("motoSpawnChance", String.valueOf(motoSpawnChance));
+                properties.setProperty("carSpawnChance", String.valueOf(carSpawnChance));
+                properties.setProperty("motoLife", String.valueOf(motoLife));
+                properties.setProperty("carLife", String.valueOf(carLife));
+                properties.setProperty("motoPrio", String.valueOf(motoAI.getPrio()));
+                properties.setProperty("carPrio", String.valueOf(carAI.getPrio()));
+                properties.store(Files.newOutputStream(Path.of(path)), "ToadSpawner config file");
+            }else{
+                new File(path).createNewFile();
+                saveSim(path);
+                //System.out.println("Can not save cfg file");
+            }
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
+    //переделать на java сериализацию
     public synchronized void loadConf(String path){
         Properties properties = new Properties();
         try {
-            properties.load(Files.newInputStream(Path.of(path)));
-            motoSpawnPeriod = Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(1000)));
-            carSpawnPeriod = Integer.parseInt(properties.getProperty("carSpawnPeriod", String.valueOf(2000)));
-            motoSpawnChance = Integer.parseInt(properties.getProperty("motoSpawnChance", String.valueOf(70)));
-            carSpawnChance = Integer.parseInt(properties.getProperty("carSpawnChance", String.valueOf(40)));
-            motoLife = Integer.parseInt(properties.getProperty("motoLife", String.valueOf(2000)));
-            carLife = Integer.parseInt(properties.getProperty("carLife", String.valueOf(4000)));
-            motoAI.setPrio(Integer.parseInt(properties.getProperty("motoPrio", String.valueOf(5))));
-            carAI.setPrio(Integer.parseInt(properties.getProperty("carPrio", String.valueOf(5))));
-
+            if(new File(path).exists()) {
+                properties.load(Files.newInputStream(Path.of(path)));
+                motoSpawnPeriod = Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(1000)));
+                carSpawnPeriod = Integer.parseInt(properties.getProperty("carSpawnPeriod", String.valueOf(2000)));
+                motoSpawnChance = Integer.parseInt(properties.getProperty("motoSpawnChance", String.valueOf(70)));
+                carSpawnChance = Integer.parseInt(properties.getProperty("carSpawnChance", String.valueOf(40)));
+                motoLife = Integer.parseInt(properties.getProperty("motoLife", String.valueOf(2000)));
+                carLife = Integer.parseInt(properties.getProperty("carLife", String.valueOf(4000)));
+                motoAI.setPrio(Integer.parseInt(properties.getProperty("motoPrio", String.valueOf(5))));
+                carAI.setPrio(Integer.parseInt(properties.getProperty("carPrio", String.valueOf(5))));
+            }else{
+                new File(path).createNewFile();
+                loadConf(path);
+                //System.out.println("Can not load cfg file");
+            }
         } catch (IOException e) {
+            System.err.println(": " + e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -31,7 +31,7 @@ public class Main extends Application {
             @Override
             public void handle(WindowEvent windowEvent) {
                 ToadSpawner toadSpawner = ToadSpawner.getInstance(mainController.field);
-                toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
+                toadSpawner.saveConf("./src/main/resources/ru/nstu/lab02v2/AppFiles/conf.cfg");
                 Platform.exit();
                 System.exit(0);
             }

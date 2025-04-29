@@ -106,7 +106,7 @@ public class MainController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {//выход из приложения через меню
-        toadSpawner.saveConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
+        toadSpawner.saveConf("./src/main/resources/ru/nstu/lab02v2/AppFiles/conf.cfg");
         Platform.exit();
         System.exit(0);
     }
@@ -177,7 +177,7 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to save sim data");
         fileChooser.setInitialFileName("SimulationSave");
-        fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
         if (file != null) {
@@ -193,7 +193,7 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to load sim data");
         fileChooser.setInitialFileName("SimulationSave");
-        fileChooser.setInitialDirectory(new File("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
         if (file != null) {
@@ -262,7 +262,7 @@ public class MainController implements Initializable {
         toadSpawner = ToadSpawner.getInstance(field);
         toadSpawner.mainController = this;
         //toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
-        toadSpawner.loadConf("C:\\Users\\nic--\\source\\Jaba\\Lab02v2\\src\\main\\resources\\ru\\nstu\\lab02v2\\AppFiles\\conf.cfg");
+        toadSpawner.loadConf("./src/main/resources/ru/nstu/lab02v2/AppFiles/conf.cfg");
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
 
