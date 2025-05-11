@@ -5,11 +5,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import ru.nstu.lab02v2.Add.Entity;
 import ru.nstu.lab02v2.Add.LocationSetter;
-import ru.nstu.lab02v2.Main;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 public class CarJaba extends Entity implements LocationSetter {
+
 
     public final int type = random.nextInt(carImages.length);
 
@@ -55,6 +55,12 @@ public class CarJaba extends Entity implements LocationSetter {
     }
 
     public void spawn(Pane pane){
+        if(view == null) {
+            view = new ImageView(carImages[type]);
+            view.resize(this.getSizeX(), this.getSizeY());
+            view.setY(this.getY());
+            view.setX(this.getX());
+        }
         pane.getChildren().add(view);
     }
     public void die(Pane pane){
@@ -76,8 +82,8 @@ public class CarJaba extends Entity implements LocationSetter {
     public void setRandomLocationWithBounds(double maxX, double maxY){
         this.x = random.nextDouble(maxX);
         this.y = random.nextDouble(maxY);
-        view.setX(this.getX());
-        view.setY(y);
+        view.setX(this.x);
+        view.setY(this.y);
     }
 
     public static Image[] getCarImages() {

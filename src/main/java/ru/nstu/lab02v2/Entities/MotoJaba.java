@@ -6,8 +6,9 @@ import javafx.scene.layout.Pane;
 import ru.nstu.lab02v2.Add.Entity;
 import ru.nstu.lab02v2.Add.LocationSetter;
 
-public class MotoJaba extends Entity implements LocationSetter {
+import java.io.Serializable;
 
+public class MotoJaba extends Entity implements LocationSetter {
     public final int type = random.nextInt(motoImages.length);
 
     //группировка stream groupBy - подсчёт статистики
@@ -51,9 +52,14 @@ public class MotoJaba extends Entity implements LocationSetter {
         pane.getChildren().add(view);
     }
 
-
     public void spawn(Pane pane){
-            pane.getChildren().add(view);
+        if(view == null) {
+            view = new ImageView(motoImages[type]);
+            view.resize(this.getSizeX(), this.getSizeY());
+            view.setY(this.getY());
+            view.setX(this.getX());
+        }
+        pane.getChildren().add(view);
     }
     public void die(Pane pane){
         pane.getChildren().remove(view);

@@ -7,31 +7,35 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import ru.nstu.lab02v2.Main;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable{
+    private static final long serialVersionUID = 2L;
+
     //hashcode equals переопределение
-    //class propeties для пятой лабы(плюс искать в тг)
-    protected double x = 0, y = 0;
-    protected double sizeX = 150, sizeY = 150;
+    protected double x = 0;
+    protected double y = 0;
+    protected double sizeX = 150;
+    protected double sizeY = 150;
     @JsonIgnore
-    protected static final Random random = new Random();
+    protected transient static final Random random = new Random();
     @JsonIgnore
-    protected static Pane pane = null;
+    protected transient static Pane pane = null;
     public int ID = 0;
     protected long birthtime = 0;
     protected double velocity = 3;
     public boolean isDirectionSet = false;
     @JsonIgnore
-    protected ImageView view;
+    protected transient ImageView view;
     @JsonIgnore
-    public static Image[] motoImages = {
+    public transient static Image[] motoImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Motos/MotoToad2.png")), 150, 150, true, true)
     };
     @JsonIgnore
-    public static Image[] carImages = {
+    public transient static Image[] carImages = {
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad1.png")), 150, 150, true, true),
             new Image(Objects.requireNonNull(Main.class.getResourceAsStream("Cars/CarToad2.png")), 150, 150, true, true)
     };

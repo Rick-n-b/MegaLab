@@ -1,42 +1,23 @@
 package ru.nstu.lab02v2.AI;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 
 //extends Thread
-public abstract class BaseAI {
-
+public abstract class BaseAI extends Thread implements Serializable {
+    private static final long serialVersionUID = 1L;
     protected int fps = 60;
     protected boolean disabled = true;
 
-    synchronized public void start(){
-        if(disabled) {
-            moveThread.setDaemon(true);
-            moveThread.start();
-        }
-    }
-    synchronized public void stop(){
-        if(!disabled){
-            try {
-                moveThread.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
+    public void run(){
     }
 
-    @JsonIgnore
-    protected Thread moveThread;
-
-    public void setDisabled(boolean disabled){
+    public synchronized void setDisabled(boolean disabled){
         this.disabled = disabled;
         if(!disabled) {
-            synchronized (moveThread) {
-                if (moveThread.isAlive())
-                    moveThread.notify();
+                if (this.isAlive())
+                    this.notify();
                 else
-                    moveThread.start();
-            }
+                    this.start();
         }
     }
     public boolean getDisabled(){
@@ -44,10 +25,10 @@ public abstract class BaseAI {
     }
 
     public void setPrio(int p){
-        moveThread.setPriority(p);
+        this.setPriority(p);
     }
 
     public int getPrio(){
-        return  moveThread.getPriority();
+        return  this.getPriority();
     }
 }

@@ -173,32 +173,71 @@ public class MainController implements Initializable {
 
     @FXML
     void saveSim(ActionEvent event) {
-        toadSpawner.pause();
+        if(toadSpawner.isStarted())
+            toadSpawner.pause();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to save sim data");
         fileChooser.setInitialFileName("SimulationSave");
         fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("binary file", "*.dat", "*.bin"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
         if (file != null) {
-            toadSpawner.saveSim(file.getPath());
+            if(file.getPath().contains(".dat") || file.getPath().contains(".bin"))
+                toadSpawner.saveSim(file.getPath());
+            else if(file.getPath().contains(".json"))
+                toadSpawner.saveJsonSim(file.getPath());
         }
         toadSpawner.unpause();
     }
 
     @FXML
     void loadSim(ActionEvent event) {
-        toadSpawner.pause();
+        if(toadSpawner.isStarted())
+            toadSpawner.pause();
         startEnable();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to load sim data");
         fileChooser.setInitialFileName("SimulationSave");
         fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("binary file", "*.dat", "*.bin"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
         if (file != null) {
             toadSpawner.end();
-            toadSpawner.loadSim(file.getPath(), field);
+            if(file.getPath().contains(".dat") || file.getPath().contains(".bin"))
+                toadSpawner = toadSpawner.loadSim(file.getPath(), field);
+            else if(file.getPath().contains(".json"))
+                toadSpawner.loadJsonSim(file.getPath(), field);
+            toadSpawner.setPane(field);
+            toadSpawner.mainController = this;
+//-----------------------------------------------------------------------------------------------------------
+            carSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getCarSpawnChance());
+            motoSpawnChanceComboBox.getSelectionModel().select((Integer) toadSpawner.getMotoSpawnChance());
+
+            carscfg.setPromptText(String.valueOf(toadSpawner.getCarSpawnPeriod()));
+            motoscfg.setPromptText(String.valueOf(toadSpawner.getMotoSpawnPeriod()));
+
+            motolife.setPromptText(String.valueOf(toadSpawner.getMotoLife()));
+            carlife.setPromptText(String.valueOf(toadSpawner.getCarLife()));
+
+            carscfg.setWrapText(true);
+            motoscfg.setWrapText(true);
+            //кнопки конца симуляции сначала недоступны
+            endButton.setDisable(true);
+            endMenu.setDisable(true);
+            //бинд кнопок начала и конца симуляции (кнопка старт вкл -> кнопка end выкл)
+            endButton.disableProperty().bindBidirectional(endMenu.disableProperty());
+            startButton.disableProperty().bindBidirectional(startMenu.disableProperty());
+            //бинды радио-кнопок
+            hideTimerRB.selectedProperty().bindBidirectional(hideTimerRBMenu.selectedProperty());
+            showTimerRB.selectedProperty().bindBidirectional(showTimerRBMenu.selectedProperty());
+            //зависимость видимости текста от выбора радио-кнопки
+            timerLabel.visibleProperty().bind(showTimerRB.selectedProperty());
+            infoMenu.selectedProperty().bindBidirectional(info.selectedProperty());
+
+            motoPrio.getSelectionModel().select(toadSpawner.getMotoAI().getPrio() - 1);
+            carPrio .getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
         }
     }
     @FXML
