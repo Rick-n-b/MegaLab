@@ -105,7 +105,6 @@ public class ToadSpawner implements Serializable {
         id = new HashSet<>();
         timeSpawn = new TreeMap<>();
         timer = new Timer("AllTheTimer");
-        //saveTime = new Long[4];
 
         this.pane = pane;
     }
