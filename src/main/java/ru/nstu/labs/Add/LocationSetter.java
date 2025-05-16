@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2.Add;
+package ru.nstu.labs.Add;
 
 public interface LocationSetter {
     public void setLocation(double x, double y);

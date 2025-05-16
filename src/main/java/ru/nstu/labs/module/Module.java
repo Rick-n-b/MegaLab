@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2.module;
+package ru.nstu.labs.module;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,12 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.nstu.lab02v2.Main;
-import ru.nstu.lab02v2.MainController;
-import ru.nstu.lab02v2.Add.ToadSpawner;
+import ru.nstu.labs.Main;
+import ru.nstu.labs.MainController;
+import ru.nstu.labs.Add.ToadSpawner;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 public class Module extends Application {
 

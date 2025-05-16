@@ -1,16 +1,16 @@
-package ru.nstu.lab02v2.AI;
+package ru.nstu.labs.AI;
 
-import ru.nstu.lab02v2.Add.ToadSpawner;
-import ru.nstu.lab02v2.Entities.MotoJaba;
+import ru.nstu.labs.Add.ToadSpawner;
+import ru.nstu.labs.Entities.CarJaba;
 
 import java.util.Random;
 
-public class MotoAI extends BaseAI {
+public class CarAI extends BaseAI {
 
-
+    @Override
     public void run() {
+        this.setName("CarMove!");
         ToadSpawner toadSpawner = ToadSpawner.getInstance();
-        this.setName("MotoMove!");
         while (true) {
             if(disabled) {
                 synchronized (this) {
@@ -22,14 +22,14 @@ public class MotoAI extends BaseAI {
                 }
             }
             else {
-                synchronized (toadSpawner.getMotos()) {
-                    for (MotoJaba motoJaba : toadSpawner.getMotos()) {
-                        if (!motoJaba.isDirectionSet) {
-                            motoJaba.isDirectionSet = true;
-                            motoJaba.setVelocity(motoJaba.getVelocity() * (new Random().nextBoolean() ? -1 : 1));
+                synchronized (toadSpawner.getCars()) {
+                    for (CarJaba carJaba : toadSpawner.getCars()) {
+                        if (!carJaba.isDirectionSet) {
+                            carJaba.isDirectionSet = true;
+                            carJaba.setVelocity(carJaba.getVelocity() * (new Random().nextBoolean() ? -1 : 1));
                         }
 
-                        motoJaba.setX(motoJaba.getX() + motoJaba.getVelocity());
+                        carJaba.setY(carJaba.getY() + carJaba.getVelocity());
                     }
                 }
                 try {

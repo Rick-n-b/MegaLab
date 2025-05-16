@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2.Add;
+package ru.nstu.labs.Add;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.AI.CarAI;
-import ru.nstu.lab02v2.AI.MotoAI;
-import ru.nstu.lab02v2.Entities.CarJaba;
-import ru.nstu.lab02v2.Entities.MotoJaba;
-import ru.nstu.lab02v2.MainController;
+import ru.nstu.labs.AI.CarAI;
+import ru.nstu.labs.AI.MotoAI;
+import ru.nstu.labs.Entities.CarJaba;
+import ru.nstu.labs.Entities.MotoJaba;
+import ru.nstu.labs.MainController;
 
 import java.io.*;
 import java.nio.file.Files;

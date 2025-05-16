@@ -1,11 +1,11 @@
-package ru.nstu.lab02v2.Add;
+package ru.nstu.labs.Add;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Main;
+import ru.nstu.labs.Main;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,12 +1,10 @@
-package ru.nstu.lab02v2.Entities;
+package ru.nstu.labs.Entities;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import ru.nstu.lab02v2.Add.Entity;
-import ru.nstu.lab02v2.Add.LocationSetter;
-
-import java.io.Serializable;
+import ru.nstu.labs.Add.Entity;
+import ru.nstu.labs.Add.LocationSetter;
 
 public class CarJaba extends Entity implements LocationSetter {
 

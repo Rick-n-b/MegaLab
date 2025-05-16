@@ -1,13 +1,12 @@
-package ru.nstu.lab02v2.module;
+package ru.nstu.labs.module;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import ru.nstu.lab02v2.MainController;
-import ru.nstu.lab02v2.Add.ToadSpawner;
+import ru.nstu.labs.MainController;
+import ru.nstu.labs.Add.ToadSpawner;
 
 import java.net.URL;
 import java.util.ResourceBundle;

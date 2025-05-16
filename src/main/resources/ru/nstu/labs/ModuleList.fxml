@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane fx:id="moduleList" prefHeight="340.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.lab02v2.moduleList.ModuleListController">
+<AnchorPane fx:id="moduleList" prefHeight="340.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.labs.moduleList.ModuleListController">
    <children>
       <TextArea fx:id="objects" layoutX="11.0" layoutY="14.0" prefHeight="279.0" prefWidth="279.0" />
       <Button fx:id="okButton" layoutX="136.0" layoutY="301.0" mnemonicParsing="false" onMouseClicked="#okPress" text="OK" />

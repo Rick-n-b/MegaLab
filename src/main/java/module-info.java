@@ -1,20 +1,20 @@
-module ru.nstu.lab02v2 {
+module ru.nstu.labs {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    exports ru.nstu.lab02v2.Add;
-    exports ru.nstu.lab02v2.AI;
-    exports ru.nstu.lab02v2.Entities;
+    exports ru.nstu.labs.Add;
+    exports ru.nstu.labs.AI;
+    exports ru.nstu.labs.Entities;
 
-    opens ru.nstu.lab02v2.Add to com.fasterxml.jackson.databind;
+    opens ru.nstu.labs.Add to com.fasterxml.jackson.databind;
 
 
-    exports ru.nstu.lab02v2.module;
-    opens ru.nstu.lab02v2.module to javafx.fxml;
+    exports ru.nstu.labs.module;
+    opens ru.nstu.labs.module to javafx.fxml;
 
-    opens ru.nstu.lab02v2 to javafx.fxml;
-    exports ru.nstu.lab02v2;
-    exports ru.nstu.lab02v2.moduleList;
-    opens ru.nstu.lab02v2.moduleList to javafx.fxml;
+    opens ru.nstu.labs to javafx.fxml;
+    exports ru.nstu.labs;
+    exports ru.nstu.labs.moduleList;
+    opens ru.nstu.labs.moduleList to javafx.fxml;
 }

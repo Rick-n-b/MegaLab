@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2.moduleList;
+package ru.nstu.labs.moduleList;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,9 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.nstu.lab02v2.Add.ToadSpawner;
-import ru.nstu.lab02v2.Main;
-import ru.nstu.lab02v2.MainController;
+import ru.nstu.labs.Add.ToadSpawner;
+import ru.nstu.labs.Main;
+import ru.nstu.labs.MainController;
 
 import java.io.IOException;
 import java.util.Map;

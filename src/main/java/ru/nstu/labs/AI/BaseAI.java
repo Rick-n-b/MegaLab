@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2.AI;
+package ru.nstu.labs.AI;
 
 import java.io.Serializable;
 

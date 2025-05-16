@@ -1,4 +1,4 @@
-package ru.nstu.lab02v2;
+package ru.nstu.labs;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -11,9 +11,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.nstu.lab02v2.Add.ToadSpawner;
-import ru.nstu.lab02v2.module.Module;
-import ru.nstu.lab02v2.moduleList.ModuleList;
+import ru.nstu.labs.Add.ToadSpawner;
+import ru.nstu.labs.module.Module;
+import ru.nstu.labs.moduleList.ModuleList;
 
 import java.io.File;
 import java.io.IOException;
@@ -106,7 +106,7 @@ public class MainController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {//выход из приложения через меню
-        toadSpawner.saveConf("./src/main/resources/ru/nstu/lab02v2/AppFiles/conf.cfg");
+        toadSpawner.saveConf("./src/main/resources/ru/nstu/labs/AppFiles/conf.cfg");
         Platform.exit();
         System.exit(0);
     }
@@ -178,7 +178,7 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to save sim data");
         fileChooser.setInitialFileName("SimulationSave");
-        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/labs/AppFiles/"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("binary file", "*.dat", "*.bin"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
@@ -199,7 +199,7 @@ public class MainController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to load sim data");
         fileChooser.setInitialFileName("SimulationSave");
-        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/lab02v2/AppFiles/"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ru/nstu/labs/AppFiles/"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("binary file", "*.dat", "*.bin"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
@@ -301,7 +301,7 @@ public class MainController implements Initializable {
         toadSpawner = ToadSpawner.getInstance(field);
         toadSpawner.mainController = this;
         //toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
-        toadSpawner.loadConf("./src/main/resources/ru/nstu/lab02v2/AppFiles/conf.cfg");
+        toadSpawner.loadConf("./src/main/resources/ru/nstu/labs/AppFiles/conf.cfg");
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
 
