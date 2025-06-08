@@ -9,6 +9,7 @@ module ru.nstu.labs {
 
     opens ru.nstu.labs.Add to com.fasterxml.jackson.databind;
 
+    requires ru.nstu.shared;
 
     exports ru.nstu.labs.module;
     opens ru.nstu.labs.module to javafx.fxml;
