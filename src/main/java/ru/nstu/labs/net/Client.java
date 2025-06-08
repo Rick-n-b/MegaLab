@@ -4,6 +4,7 @@ import ru.nstu.events.Event;
 import ru.nstu.events.ParamEvent;
 import ru.nstu.labs.net.ClientTrades.SmolTrade;
 import ru.nstu.labs.net.ClientTrades.TradeIn;
+import ru.nstu.labs.net.ClientTrades.TradeOut;
 import ru.nstu.messages.*;
 import ru.nstu.network.*;
 import ru.nstu.requests.*;
@@ -159,21 +160,21 @@ public class Client {
     public void rejectTrade(SmolTrade trade) {
         if(status != Status.CONNECTED)
             return;
-        var request = new RejectTradeRequest(trade.getId());
+        var request = new RejectTradeRequest(trade.id);
         networkClient.send(request);
         synchronized (trades) {
-            trades.remove(trade.getId());
+            trades.remove(trade.id);
             tradesUpdated.invoke(this);
         }
     }
 
-    public void cancelTrade(OutgoingTrade trade) {
+    public void cancelTrade(TradeOut trade) {
         if(status != Status.CONNECTED)
             return;
-        var request = new CancelTradeRequest(trade.getId());
+        var request = new CancelTradeRequest(trade.id);
         networkClient.send(request);
         synchronized (trades) {
-            trades.remove(trade.getId());
+            trades.remove(trade.id);
             tradesUpdated.invoke(this);
         }
     }
@@ -192,21 +193,22 @@ public class Client {
     private void onConnected(ConnectResponse response) {
         if(isRegistered())
             return;
-        descriptor = response.clientDescriptor();
+        id = response.id();
+        name = response.name();
         synchronized (neighbours) {
-            for (var descriptor : response.clients())
-                neighbours.put(descriptor.id(), descriptor);
+            for (var client : response.clients())
+                neighbours.put(id, client);
         }
         status = Status.CONNECTED;
         connected.invoke(this);
     }
 
     private void onClientConnected(ClientConnectMessage message) {
-        if(message.descriptor().id() == descriptor.id())
+        if(message.clientId() == id && message.name().equals(name))
             return;
-        var clientDescriptor = message.descriptor();
+        var client = new NetClient(message.clientId(), message.name());
         synchronized (neighbours) {
-            neighbours.put(clientDescriptor.id(), clientDescriptor);
+            neighbours.put(id, client);
         }
     }
 
@@ -217,41 +219,40 @@ public class Client {
     }
 
     private void onTradeSent(TradeOfferResponse response) {
-        var trade = new OutgoingTrade(response.tradeId(), response.targetId(), response.terms());
+        var trade = new TradeOut(response.id(), response.inners(),  response.targetId());
         synchronized (trades) {
-            trades.put(response.tradeId(), trade);
+            trades.put(response.id(), trade);
         }
         tradesUpdated.invoke(this);
     }
 
     private void onTradeOffered(OfferTradeMessage message) {
-        var trade = new IncomingTrade(message.tradeId(), message.issuerId(), message.terms());
+        var trade = new TradeIn(message.id(),message.inners(), message.senderId());
         synchronized (trades) {
-            trades.put(message.tradeId(), trade);
+            trades.put(message.id(), trade);
         }
         tradesUpdated.invoke(this);
     }
 
     private void onTradeAccepted(AcceptTradeMessage message) {
-        var trade = trades.get(message.tradeId());
-        trade.updateTerms(message.sentCount());
+        var trade = trades.get(message.id());
         tradeAccepted.invoke(this, trade);
         synchronized (trades) {
-            trades.remove(message.tradeId());
+            trades.remove(message.id());
         }
         tradesUpdated.invoke(this);
     }
 
     private void onTradeRejected(RejectTradeMessage message) {
         synchronized (trades) {
-            trades.remove(message.tradeId());
+            trades.remove(message.id());
         }
         tradesUpdated.invoke(this);
     }
 
     private void onTradeCanceled(CancellTradeMessage message) {
         synchronized (trades) {
-            trades.remove(message.tradeId());
+            trades.remove(message.id());
         }
         tradesUpdated.invoke(this);
     }
