@@ -11,11 +11,13 @@ module ru.nstu.labs {
 
     requires ru.nstu.shared;
 
-    exports ru.nstu.labs.module;
-    opens ru.nstu.labs.module to javafx.fxml;
+    exports ru.nstu.labs.modules.module;
+    opens ru.nstu.labs.modules.module to javafx.fxml;
+    exports ru.nstu.labs.modules;
+    opens ru.nstu.labs.modules to javafx.fxml;
 
     opens ru.nstu.labs to javafx.fxml;
     exports ru.nstu.labs;
-    exports ru.nstu.labs.moduleList;
-    opens ru.nstu.labs.moduleList to javafx.fxml;
+    exports ru.nstu.labs.modules.moduleList;
+    opens ru.nstu.labs.modules.moduleList to javafx.fxml;
 }

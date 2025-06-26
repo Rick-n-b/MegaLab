@@ -28,7 +28,7 @@ public class CarJaba extends Entity implements LocationSetter {
     }
     public CarJaba(Pane pane,int id,long time){
         view = new ImageView(carImages[type]);
-        this.pane = pane;
+        Entity.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setRandomLocationWithBounds(pane.getWidth() - this.getSizeX(), pane.getHeight()  - this.getSizeY());
         pane.getChildren().add(view);
@@ -38,14 +38,14 @@ public class CarJaba extends Entity implements LocationSetter {
     }
     public CarJaba(Pane pane, double x, double y){
         view = new ImageView(carImages[type]);
-        this.pane = pane;
+        Entity.pane = pane;
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);
         pane.getChildren().add(view);
     }
     public CarJaba(Pane pane, double x, double y, double sizeX, double sizeY){
         view = new ImageView(carImages[type]);
-        this.pane = pane;
+        Entity.pane = pane;
         this.setSize(sizeX, sizeY);
         view.resize(this.getSizeX(), this.getSizeY());
         setLocation(x, y);

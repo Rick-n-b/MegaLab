@@ -312,8 +312,9 @@ public class ToadSpawner implements Serializable {
     }
 
     public synchronized void saveConf(String path){
+        File cfgFile = new File(path);
         try {
-            if(new File(path).exists()) {
+            if(cfgFile.exists()) {
                 Properties properties = new Properties();
                 properties.setProperty("motoSpawnPeriod", String.valueOf(motoSpawnPeriod));
                 properties.setProperty("carSpawnPeriod", String.valueOf(carSpawnPeriod));
@@ -325,7 +326,7 @@ public class ToadSpawner implements Serializable {
                 properties.setProperty("carPrio", String.valueOf(carAI.getPrio()));
                 properties.store(Files.newOutputStream(Path.of(path)), "ToadSpawner config file");
             }else{
-                new File(path).createNewFile();
+                cfgFile.createNewFile();
                 saveSim(path);
                 //System.out.println("Can not save cfg file");
             }
@@ -337,8 +338,9 @@ public class ToadSpawner implements Serializable {
     //переделать на java сериализацию
     public synchronized void loadConf(String path){
         Properties properties = new Properties();
+        var file = new File(path);
         try {
-            if(new File(path).exists()) {
+            if(file.exists()) {
                 properties.load(Files.newInputStream(Path.of(path)));
                 motoSpawnPeriod = 0 >= Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(1000))) ? 1000: Integer.parseInt(properties.getProperty("motoSpawnPeriod", String.valueOf(1000)));
                 carSpawnPeriod = 0 >= Integer.parseInt(properties.getProperty("carSpawnPeriod", String.valueOf(2000))) ? 2000 : Integer.parseInt(properties.getProperty("carSpawnPeriod", String.valueOf(2000)));
@@ -349,9 +351,7 @@ public class ToadSpawner implements Serializable {
                 motoAI.setPrio(Integer.parseInt(properties.getProperty("motoPrio", String.valueOf(5))));
                 carAI.setPrio(Integer.parseInt(properties.getProperty("carPrio", String.valueOf(5))));
             }else{
-                new File(path).createNewFile();
-                loadConf(path);
-                //System.out.println("Can not load cfg file");
+                file.createNewFile();
             }
         } catch (IOException e) {
             System.err.println(": " + e.getMessage());
@@ -420,6 +420,28 @@ public class ToadSpawner implements Serializable {
             System.out.println("Данные симуляции загружены из " + path);
         } catch (IOException e) {
             System.err.println("Ошибка при загрузке JSON данных симуляции: " + e.getMessage());
+        }
+    }
+
+    public void generate(Integer count){
+        clear();
+        for(int i = 0; i < count; i++){
+            if(rand.nextBoolean()){
+                cars.add(new CarJaba(pane, currentId, millis));
+                carTypeCount[cars.getLast().type]++;
+
+                id.add(currentId);
+                timeSpawn.put(currentId, millis);
+                currentId++;
+            }else{
+                motos.add(new MotoJaba(pane, currentId, millis));
+                motoTypeCount[cars.getLast().type]++;
+
+                id.add(currentId);
+                timeSpawn.put(currentId, millis);
+                currentId++;
+            }
+
         }
     }
 

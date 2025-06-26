@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/21.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nstu.labs.modules.TradeOfferController">
+    <children>
+        <ListView fx:id="others" layoutX="154.0" layoutY="43.0" prefHeight="235.0" prefWidth="200.0" />
+        <Button fx:id="offerButton" layoutX="43.0" layoutY="66.0" mnemonicParsing="false" text="Offer Trade" />
+        <Button fx:id="closeButton" layoutX="59.0" layoutY="118.0" mnemonicParsing="false" text="Close" />
+    </children>
+</Pane>
+

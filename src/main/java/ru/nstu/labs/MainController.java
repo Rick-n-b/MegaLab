@@ -12,12 +12,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.nstu.labs.Add.ToadSpawner;
-import ru.nstu.labs.module.Module;
-import ru.nstu.labs.moduleList.ModuleList;
+import ru.nstu.labs.modules.ClientMenuController;
+import ru.nstu.labs.modules.TradeOfferController;
+import ru.nstu.labs.modules.TradesController;
+import ru.nstu.labs.modules.module.Module;
+import ru.nstu.labs.modules.moduleList.ModuleList;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -88,6 +92,35 @@ public class MainController implements Initializable {
     Module module;
     ModuleList moduleList;
 
+
+    ClientMenuController clientMenuController;
+    TradesController tradesController;
+    TradeOfferController tradeOfferController;
+
+    public void setNetControllers(ClientMenuController clientMenuController,
+                                  TradesController tradesController,
+                                  TradeOfferController tradeOfferController)
+    {
+        this.clientMenuController = clientMenuController;
+        this.tradesController = tradesController;
+        this.tradeOfferController = tradeOfferController;
+    }
+
+    @FXML
+    void usersShow(ActionEvent event) {
+        clientMenuController.showWindow();
+    }
+
+    @FXML
+    void tradesShow(ActionEvent event) {
+        tradesController.showWindow();
+    }
+
+    @FXML
+    void tradesOfferedShow(ActionEvent event) {
+        tradeOfferController.showWindow();
+    }
+
     @FXML
     void endSim(ActionEvent event) throws IOException {//конец симуляции
         if (infoMenu.isSelected()) {
@@ -98,15 +131,16 @@ public class MainController implements Initializable {
             toadSpawner.end();
         }
     }
+
     @FXML
-    void showList(ActionEvent event) throws IOException{ //окно с живыми объектами
+    void showList(ActionEvent event) throws IOException { //окно с живыми объектами
         toadSpawner.pause();
         moduleListRun();
     }
 
     @FXML
     void exit(ActionEvent event) {//выход из приложения через меню
-        toadSpawner.saveConf("./src/main/resources/ru/nstu/labs/AppFiles/conf.cfg");
+        toadSpawner.saveConf(Objects.requireNonNull(Main.class.getResource("conf.cfg")).getPath().substring(1));
         Platform.exit();
         System.exit(0);
     }
@@ -156,15 +190,14 @@ public class MainController implements Initializable {
                 passed = false;
 
         if (passed) {
-            if(toadSpawner.isPaused())
+            if (toadSpawner.isPaused())
                 toadSpawner.unpause();
             else
                 toadSpawner.start();//если поля прошли проверку, то запускаем симуляцию, иначе - окно об ошибке
 
             toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
             toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
-        }
-        else {
+        } else {
             moduleRun();
             module.setInfo("Number isn't integer or it's too big");
             module.cancelButtonDisable();
@@ -173,7 +206,7 @@ public class MainController implements Initializable {
 
     @FXML
     void saveSim(ActionEvent event) {
-        if(toadSpawner.isStarted())
+        if (toadSpawner.isStarted())
             toadSpawner.pause();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file to save sim data");
@@ -183,9 +216,9 @@ public class MainController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
         File file = fileChooser.showSaveDialog(mainMenu.getScene().getWindow());
         if (file != null) {
-            if(file.getPath().contains(".dat") || file.getPath().contains(".bin"))
+            if (file.getPath().contains(".dat") || file.getPath().contains(".bin"))
                 toadSpawner.saveSim(file.getPath());
-            else if(file.getPath().contains(".json"))
+            else if (file.getPath().contains(".json"))
                 toadSpawner.saveJsonSim(file.getPath());
         }
         toadSpawner.unpause();
@@ -193,7 +226,7 @@ public class MainController implements Initializable {
 
     @FXML
     void loadSim(ActionEvent event) {
-        if(toadSpawner.isStarted())
+        if (toadSpawner.isStarted())
             toadSpawner.pause();
         startEnable();
         FileChooser fileChooser = new FileChooser();
@@ -205,9 +238,9 @@ public class MainController implements Initializable {
         File file = fileChooser.showOpenDialog(mainMenu.getScene().getWindow());
         if (file != null) {
             toadSpawner.end();
-            if(file.getPath().contains(".dat") || file.getPath().contains(".bin"))
+            if (file.getPath().contains(".dat") || file.getPath().contains(".bin"))
                 toadSpawner = toadSpawner.loadSim(file.getPath(), field);
-            else if(file.getPath().contains(".json"))
+            else if (file.getPath().contains(".json"))
                 toadSpawner.loadJsonSim(file.getPath(), field);
             toadSpawner.setPane(field);
             toadSpawner.mainController = this;
@@ -237,28 +270,33 @@ public class MainController implements Initializable {
             infoMenu.selectedProperty().bindBidirectional(info.selectedProperty());
 
             motoPrio.getSelectionModel().select(toadSpawner.getMotoAI().getPrio() - 1);
-            carPrio .getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
+            carPrio.getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
         }
     }
+
     @FXML
-    public void setMotoPrio(ActionEvent event){
+    public void setMotoPrio(ActionEvent event) {
         toadSpawner.setMotoMovePrio(motoPrio.getSelectionModel().getSelectedItem());
     }
+
     @FXML
-    public void setCarPrio(ActionEvent event){
+    public void setCarPrio(ActionEvent event) {
         toadSpawner.setCarMovePrio(carPrio.getSelectionModel().getSelectedItem());
     }
+
     @FXML
-    public void motoAction(ActionEvent event){
-        if(toadSpawner.isStarted())
+    public void motoAction(ActionEvent event) {
+        if (toadSpawner.isStarted())
             toadSpawner.getMotoAI().setDisabled(!motoAIRB.selectedProperty().getValue());
 
     }
+
     @FXML
-    public void carAction(ActionEvent event){
-        if(toadSpawner.isStarted())
+    public void carAction(ActionEvent event) {
+        if (toadSpawner.isStarted())
             toadSpawner.getCarAI().setDisabled(!carAIRB.selectedProperty().getValue());
     }
+
     //вызов модульного окна
     public void moduleRun() throws IOException {
         module = new Module();
@@ -274,9 +312,10 @@ public class MainController implements Initializable {
         moduleList.setMainController(this);
         moduleList.start((Stage) timerLabel.getScene().getWindow());
     }
+
     //включает кнопку старт
     public void startEnable() {
-        if(startButton.disableProperty().getValue()) {
+        if (startButton.disableProperty().getValue()) {
             startButton.setDisable(false);
             startMenu.setDisable(false);
             endButton.setDisable(true);
@@ -287,7 +326,7 @@ public class MainController implements Initializable {
 
     //выключает кнопку старт
     public void endEnable() {
-        if(!startButton.disableProperty().getValue()) {
+        if (!startButton.disableProperty().getValue()) {
             startButton.setDisable(true);
             startMenu.setDisable(true);
             endMenu.setDisable(false);
@@ -301,14 +340,16 @@ public class MainController implements Initializable {
         toadSpawner = ToadSpawner.getInstance(field);
         toadSpawner.mainController = this;
         //toadSpawner.setPane(field);//задаём спавнеру поле, куда будут сыпаться жабы
-        toadSpawner.loadConf("./src/main/resources/ru/nstu/labs/AppFiles/conf.cfg");
+
+        toadSpawner.loadConf(Objects.requireNonNull(Main.class.getResource("conf.cfg")).getPath().substring(1));
+
         //биндим таймер
         timerLabel.textProperty().bind(Bindings.convert(toadSpawner.millisProperty));
 
         for (int i = 0; i <= 100; i += 10) {//задаём значения комбо-боксам
             carSpawnChanceComboBox.getItems().add(i);
             motoSpawnChanceComboBox.getItems().add(i);
-            if(i != 0) {
+            if (i != 0) {
                 motoPrio.getItems().add(i / 10);
                 carPrio.getItems().add(i / 10);
             }
@@ -340,7 +381,7 @@ public class MainController implements Initializable {
 
 
         motoPrio.getSelectionModel().select(toadSpawner.getMotoAI().getPrio() - 1);
-        carPrio .getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
+        carPrio.getSelectionModel().select(toadSpawner.getCarAI().getPrio() - 1);
 
         Tooltip ttStart = new Tooltip("press to start");
         startButton.setTooltip(ttStart);
@@ -368,14 +409,14 @@ public class MainController implements Initializable {
                             case B:
                                 try {
                                     startSim(new ActionEvent());
+                                } catch (IOException exception) {
                                 }
-                                catch (IOException exception) {}
                                 break;
                             case E:
                                 try {
                                     endSim(new ActionEvent());
+                                } catch (IOException exception) {
                                 }
-                                catch (IOException exception) {}
                                 break;
                             case T:
                                 showTimerRB.setSelected(!showTimerRB.isSelected());

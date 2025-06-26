@@ -1,16 +1,12 @@
 package ru.nstu.labs.net;
 
-import ru.nstu.events.Event;
-import ru.nstu.events.ParamEvent;
-import ru.nstu.labs.net.ClientTrades.SmolTrade;
-import ru.nstu.labs.net.ClientTrades.TradeIn;
-import ru.nstu.labs.net.ClientTrades.TradeOut;
+import ru.nstu.events.*;
+import ru.nstu.labs.net.ClientTrades.*;
 import ru.nstu.messages.*;
 import ru.nstu.network.*;
 import ru.nstu.requests.*;
-import ru.nstu.responses.ConnectResponse;
-import ru.nstu.responses.TradeOfferResponse;
-import ru.nstu.trades.TradeInners;
+import ru.nstu.responses.*;
+import ru.nstu.trades.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -149,7 +145,7 @@ public class Client {
     public void acceptTrade(TradeIn trade) {
         if(status != Status.CONNECTED)
             return;
-        var request = new AcceptTradeRequest(trade.id, trade.getInners().request().objectCount());
+        var request = new AcceptTradeRequest(trade.id, trade.getInners().offer().objectCount());
         networkClient.send(request);
         synchronized (trades) {
             trades.remove(trade.id);
